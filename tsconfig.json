@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "dist",
-    "target": "ES2020",
+    "target": "es2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -12,13 +12,12 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*",
-    "**/dist/*"
+  "include": [
+    "src"
   ]
 }
