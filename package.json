@@ -12,8 +12,8 @@
     "migrate": "./node_modules/.bin/node-pg-migrate --envPath ./.env.local --tsconfig ./tsconfig.json -j ts -m ./src/migrations -d CONNECTION_STRING",
     "test": "jest --forceExit --detectOpenHandles --coverage --verbose --passWithNoTests",
     "rundb:local": "docker-compose up -d && docker exec blockchain_event_notifier_db bash -c \"until pg_isready; do sleep 1; done\" && sleep 5",
-    "lint:check": "yarn run lint:check",
-    "lint:fix": "yarn run lint:fix"
+    "lint:check": "eslint '**/*.{js,ts}'",
+    "lint:fix": "eslint '**/*.{js,ts}' --fix"
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.609.0",
