@@ -50,8 +50,8 @@ export type HandlerContextWithPath<
 >
 
 export type DatabaseComponent = {
-  fetchLastUpdateForNotificationType(notificationType: string): Promise<number>
-  updateLastUpdateForNotificationType(notificationType: string, timestamp: number): Promise<void>
+  fetchLastUpdateForEventType(eventType: string): Promise<number>
+  updateLastUpdateForEventType(eventType: string, timestamp: number): Promise<void>
 }
 
 export type IEventProducerResult = {
@@ -73,7 +73,7 @@ export type IEventGenerator = {
 
 export type IProducerRegistry = IBaseComponent & {
   addProducer: (producer: IEventProducer) => void
-  getProducer: (notificationType: string) => IEventProducer
+  getProducer: (eventType: string) => IEventProducer
 }
 
 export type IEventPublisher = {

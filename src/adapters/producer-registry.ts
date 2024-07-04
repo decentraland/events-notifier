@@ -17,10 +17,10 @@ export async function createProducerRegistry(components: Pick<AppComponents, 'lo
     await Promise.all([...producers.values()].map((producer) => producer.start()))
   }
 
-  function getProducer(notificationType: string): IEventProducer {
-    const producer = producers.get(notificationType)
+  function getProducer(eventType: string): IEventProducer {
+    const producer = producers.get(eventType)
     if (!producer) {
-      throw new Error(`Producer for ${notificationType} not found`)
+      throw new Error(`Producer for ${eventType} not found`)
     }
     return producer
   }

@@ -14,7 +14,7 @@ export async function createProducer(
     logger.info(`Checking for updates since ${lastSuccessfulRun}.`)
 
     const produced = await producer.run(lastSuccessfulRun)
-    await database.updateLastUpdateForNotificationType(produced.eventType, produced.lastRun)
+    await database.updateLastUpdateForEventType(produced.eventType, produced.lastRun)
 
     for (const event of produced.records) {
       await eventPublisher.publishMessage(event)
@@ -32,7 +32,7 @@ export async function createProducer(
       async function () {
         try {
           if (!lastSuccessfulRun) {
-            lastSuccessfulRun = await database.fetchLastUpdateForNotificationType(producer.eventType)
+            lastSuccessfulRun = await database.fetchLastUpdateForEventType(producer.eventType)
           }
           lastSuccessfulRun = await runProducer(lastSuccessfulRun!)
         } catch (e: any) {
