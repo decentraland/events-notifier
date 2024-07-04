@@ -1,6 +1,6 @@
 import { NotificationType } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
-import { AppComponents, BidAcceptedEvent, EventType, IEventGenerator, NotificationRecord } from '../../types'
+import { AppComponents, BidAcceptedEvent, EventType, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -89,7 +89,7 @@ export async function bidAcceptedProducer(
 
   async function run(since: number) {
     const now = Date.now()
-    const produced: NotificationRecord[] = []
+    const produced: BidAcceptedEvent[] = []
 
     let result: BidsResponse
     let paginationId = ''
@@ -104,11 +104,12 @@ export async function bidAcceptedProducer(
       }
 
       for (const bid of result.bids) {
-        const notificationRecord = {
-          type: notificationType,
-          address: bid.bidder,
-          eventKey: bid.blockchainId,
+        const event: BidAcceptedEvent = {
+          type: EventType.BID_ACCEPTED,
+          key: bid.blockchainId,
+          timestamp: bid.updatedAt * 1000,
           metadata: {
+            address: bid.bidder,
             image: bid.nft.image,
             seller: bid.seller,
             category: bid.nft.category,
@@ -121,10 +122,9 @@ export async function bidAcceptedProducer(
               bid.nft.metadata[bid.nft.category]?.name
             } was accepted.`,
             network: 'polygon'
-          },
-          timestamp: bid.updatedAt * 1000
+          }
         }
-        produced.push(notificationRecord)
+        produced.push(event)
 
         paginationId = bid.id
       }
@@ -137,30 +137,8 @@ export async function bidAcceptedProducer(
     }
   }
 
-  function convertToEvent(record: NotificationRecord): BidAcceptedEvent {
-    return {
-      type: EventType.BID_ACCEPTED,
-      key: record.eventKey,
-      timestamp: record.timestamp,
-      metadata: {
-        address: record.address,
-        image: record.metadata.image,
-        seller: record.metadata.seller,
-        category: record.metadata.category,
-        rarity: record.metadata.rarity,
-        link: record.metadata.link,
-        nftName: record.metadata.nftName,
-        price: record.metadata.price,
-        title: record.metadata.title,
-        description: record.metadata.description,
-        network: record.metadata.network
-      }
-    }
-  }
-
   return {
     notificationType,
-    run,
-    convertToEvent
+    run
   }
 }

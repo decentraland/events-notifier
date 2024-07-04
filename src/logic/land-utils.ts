@@ -1,6 +1,6 @@
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 import { l1Contracts, L1Network } from '@dcl/catalyst-contracts'
-import { NotificationRecord } from '../types'
+import { RentalEndedEvent, RentalStartedEvent } from '../types'
 
 const LAND_AND_ESTATE_QUERY = `
     query LandsAndEstates($landTokenIds: [BigInt!], $estateTokenIds: [ID!]) {
@@ -34,7 +34,7 @@ type LandAndEstateResponse = {
 export async function findCoordinatesForLandTokenId(
   network: L1Network,
   landManagerSubGraph: ISubgraphComponent,
-  batch: NotificationRecord[]
+  batch: RentalEndedEvent[] | RentalStartedEvent[]
 ): Promise<Record<string, string[]>> {
   const landResult = await landManagerSubGraph.query<LandAndEstateResponse>(LAND_AND_ESTATE_QUERY, {
     landTokenIds: batch.filter((r) => r.metadata.contract === l1Contracts[network].land).map((r) => r.metadata.tokenId),

@@ -1,6 +1,6 @@
 import { NotificationType } from '@dcl/schemas'
 import { L1Network } from '@dcl/catalyst-contracts'
-import { AppComponents, EventNotification, EventType, IEventGenerator, NotificationRecord } from '../../types'
+import { AppComponents, EventType, IEventGenerator, RentalEndedEvent } from '../../types'
 import { chunks } from '../../logic/utils'
 import { findCoordinatesForLandTokenId } from '../../logic/land-utils'
 
@@ -53,7 +53,7 @@ export async function rentalEndedProducer(
 
   async function run(since: number) {
     const now = Date.now()
-    const produced: NotificationRecord[] = []
+    const produced: RentalEndedEvent[] = []
 
     let result: RentalsResponse
     let paginationId = ''
@@ -69,11 +69,12 @@ export async function rentalEndedProducer(
       }
 
       for (const rental of result.rentals) {
-        const notificationRecord = {
-          type: notificationType,
-          address: rental.lessor,
-          eventKey: rental.id,
+        const event: RentalEndedEvent = {
+          type: EventType.RENTAL_ENDED,
+          key: rental.id,
+          timestamp: parseInt(rental.startedAt) * 1000,
           metadata: {
+            address: rental.lessor,
             contract: rental.contractAddress,
             lessor: rental.lessor,
             tenant: rental.tenant,
@@ -83,16 +84,15 @@ export async function rentalEndedProducer(
             tokenId: rental.tokenId,
             link: `${marketplaceBaseUrl}/contracts/${rental.contractAddress}/tokens/${rental.tokenId}/manage`,
             title: 'Rent Period Ending'
-          },
-          timestamp: parseInt(rental.startedAt) * 1000
+          }
         }
-        produced.push(notificationRecord)
+        produced.push(event)
 
         paginationId = rental.id
       }
     } while (result.rentals.length === PAGE_SIZE)
 
-    for (const chunk of chunks(produced, 1000)) {
+    for (const chunk of chunks<RentalEndedEvent>(produced, 1000)) {
       const landsByTokenId = await findCoordinatesForLandTokenId(network as L1Network, landManagerSubGraph, chunk)
       for (const record of chunk) {
         record.metadata.land = landsByTokenId[record.metadata.tokenId][0] // For estates, we just take one of the lands
@@ -107,31 +107,8 @@ export async function rentalEndedProducer(
     }
   }
 
-  function convertToEvent(record: NotificationRecord): EventNotification {
-    return {
-      type: EventType.RENTAL_ENDED,
-      key: record.eventKey,
-      timestamp: record.timestamp,
-      metadata: {
-        address: record.address,
-        land: record.metadata.land,
-        contract: record.metadata.contract,
-        lessor: record.metadata.lessor,
-        tenant: record.metadata.tenant,
-        operator: record.metadata.operator,
-        startedAt: record.metadata.startedAt,
-        endedAt: record.metadata.endedAt,
-        tokenId: record.metadata.tokenId,
-        link: record.metadata.link,
-        title: record.metadata.title,
-        description: record.metadata.description
-      }
-    }
-  }
-
   return {
     notificationType,
-    run,
-    convertToEvent
+    run
   }
 }

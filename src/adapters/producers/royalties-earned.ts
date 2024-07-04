@@ -1,6 +1,6 @@
 import { NotificationType } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
-import { AppComponents, EventType, IEventGenerator, NotificationRecord, RoyaltiesEarnedEvent } from '../../types'
+import { AppComponents, EventType, IEventGenerator, RoyaltiesEarnedEvent } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -95,7 +95,7 @@ export async function royaltiesEarnedProducer(
 
   async function run(since: number) {
     const now = Date.now()
-    const produced: NotificationRecord[] = []
+    const produced: RoyaltiesEarnedEvent[] = []
 
     let result: SalesResponse
     let paginationId = ''
@@ -110,11 +110,12 @@ export async function royaltiesEarnedProducer(
       }
 
       for (const sale of result.sales) {
-        const notificationRecord = {
-          type: notificationType,
-          address: sale.royaltiesCollector,
-          eventKey: sale.txHash,
+        const event: RoyaltiesEarnedEvent = {
+          type: EventType.ROYALTIES_EARNED,
+          key: sale.txHash,
+          timestamp: sale.timestamp * 1000,
           metadata: {
+            address: sale.royaltiesCollector,
             image: sale.nft.image,
             category: sale.nft.category,
             rarity: sale.nft.metadata[sale.nft.category]?.rarity,
@@ -127,10 +128,9 @@ export async function royaltiesEarnedProducer(
             royaltiesCut: sale.royaltiesCut,
             royaltiesCollector: sale.royaltiesCollector,
             network: 'polygon'
-          },
-          timestamp: sale.timestamp * 1000
+          }
         }
-        produced.push(notificationRecord)
+        produced.push(event)
 
         paginationId = sale.id
       }
@@ -143,30 +143,8 @@ export async function royaltiesEarnedProducer(
     }
   }
 
-  function convertToEvent(record: NotificationRecord): RoyaltiesEarnedEvent {
-    return {
-      type: EventType.ROYALTIES_EARNED,
-      key: record.eventKey,
-      timestamp: record.timestamp,
-      metadata: {
-        address: record.address,
-        image: record.metadata.image,
-        category: record.metadata.category,
-        rarity: record.metadata.rarity,
-        link: record.metadata.link,
-        nftName: record.metadata.nftName,
-        royaltiesCut: record.metadata.royaltiesCut,
-        royaltiesCollector: record.metadata.royaltiesCollector,
-        network: record.metadata.network,
-        title: record.metadata.title,
-        description: record.metadata.description
-      }
-    }
-  }
-
   return {
     notificationType,
-    run,
-    convertToEvent
+    run
   }
 }

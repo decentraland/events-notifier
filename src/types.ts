@@ -66,7 +66,7 @@ export type NotificationRecord = {
 
 export type IEventProducerResult = {
   notificationType: string
-  records: NotificationRecord[]
+  records: EventNotification[]
   lastRun: number
 }
 
@@ -78,7 +78,6 @@ export type IEventProducer = {
 
 export type IEventGenerator = {
   run(since: number): Promise<IEventProducerResult>
-  convertToEvent(record: NotificationRecord): EventNotification
   notificationType: NotificationType
 }
 
@@ -112,9 +111,9 @@ type BidMetadata = {
   image: string
   seller: string
   category: string
-  rarity: string
+  rarity?: string
   link: string
-  nftName: string
+  nftName?: string
   price: string
   title: string
   description: string
@@ -138,9 +137,9 @@ export type ItemSoldEvent = BaseEvent & {
     image: string
     seller: string
     category: string
-    rarity: string
+    rarity?: string
     link: string
-    nftName: string
+    nftName?: string
     network: string
     title: string
     description: string
@@ -151,8 +150,8 @@ export type RentalEndedEvent = BaseEvent & {
   type: EventType.RENTAL_ENDED
   metadata: {
     address: string
-    land: string
     contract: string
+    land?: string
     lessor: string
     tenant: string
     operator: string
@@ -161,7 +160,7 @@ export type RentalEndedEvent = BaseEvent & {
     tokenId: string
     link: string
     title: string
-    description: string
+    description?: string
   }
 }
 
@@ -169,8 +168,8 @@ export type RentalStartedEvent = BaseEvent & {
   type: EventType.RENTAL_STARTED
   metadata: {
     address: string
-    land: string
     contract: string
+    land?: string
     lessor: string
     tenant: string
     operator: string
@@ -179,7 +178,7 @@ export type RentalStartedEvent = BaseEvent & {
     tokenId: string
     link: string
     title: string
-    description: string
+    description?: string
   }
 }
 
@@ -189,14 +188,14 @@ export type RoyaltiesEarnedEvent = BaseEvent & {
     address: string
     image: string
     category: string
-    rarity: string
+    rarity?: string
     link: string
-    nftName: string
+    nftName?: string
     royaltiesCut: string
     royaltiesCollector: string
     network: string
     title: string
-    description: string
+    description?: string
   }
 }
 

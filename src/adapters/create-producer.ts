@@ -16,8 +16,8 @@ export async function createProducer(
     const produced = await producer.run(lastSuccessfulRun)
     await database.updateLastUpdateForNotificationType(produced.notificationType, produced.lastRun)
 
-    for (const record of produced.records) {
-      await eventPublisher.publishMessage(producer.convertToEvent(record))
+    for (const event of produced.records) {
+      await eventPublisher.publishMessage(event)
     }
     logger.info(`Published ${produced.records.length} new events.`)
 
