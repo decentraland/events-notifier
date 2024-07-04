@@ -43,16 +43,14 @@ describe('rental started producer', () => {
     const producer = await rentalStartedProducer({ config, landManagerSubGraph, rentalsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'rental_started',
+      eventType: 'land-rental-started',
       records: [
         {
-          type: 'rental_started',
-          address: '0x24e5f44999c151f08609f8e27b2238c773c4d020',
-          eventKey: '0x42f4ba48791e2de32f5fbf553441c2672864bb33:random-token-id:1',
+          type: 'land-rental-started',
+          key: '0x42f4ba48791e2de32f5fbf553441c2672864bb33:random-token-id:1',
+          timestamp: 1710447420000,
           metadata: {
-            description: 'Your LAND at 5,48 was rented by 0xd5359E309c47c8920C277d078d5F3c3DBeA1ef84.',
-            link: 'https://marketplace-url/contracts/0x42f4ba48791e2de32f5fbf553441c2672864bb33/tokens/random-token-id/manage',
-            title: 'LAND Rented',
+            address: '0x24e5f44999c151f08609f8e27b2238c773c4d020',
             contract: '0x42f4ba48791e2de32f5fbf553441c2672864bb33',
             lessor: '0x24e5f44999c151f08609f8e27b2238c773c4d020',
             tenant: '0xd5359E309c47c8920C277d078d5F3c3DBeA1ef84',
@@ -60,9 +58,10 @@ describe('rental started producer', () => {
             startedAt: '1710447420',
             endedAt: '1710533820',
             tokenId: 'random-token-id',
-            land: '5,48'
-          },
-          timestamp: 1710447420000
+            link: 'https://marketplace-url/contracts/0x42f4ba48791e2de32f5fbf553441c2672864bb33/tokens/random-token-id/manage',
+            title: 'LAND Rented',
+            description: 'Your LAND at 5,48 was rented by 0xd5359E309c47c8920C277d078d5F3c3DBeA1ef84.'
+          }
         }
       ],
       lastRun: expect.anything()
@@ -90,7 +89,7 @@ describe('rental started producer', () => {
     const producer = await rentalStartedProducer({ config, landManagerSubGraph, rentalsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'rental_started',
+      eventType: 'land-rental-started',
       records: [],
       lastRun: expect.anything()
     })

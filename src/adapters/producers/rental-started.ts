@@ -1,4 +1,3 @@
-import { NotificationType } from '@dcl/schemas'
 import { L1Network } from '@dcl/catalyst-contracts'
 import { AppComponents, EventType, IEventGenerator, RentalStartedEvent } from '../../types'
 import { chunks } from '../../logic/utils'
@@ -39,7 +38,7 @@ type RentalsResponse = {
   }[]
 }
 
-const notificationType = NotificationType.LAND_RENTED
+const eventType = EventType.RENTAL_STARTED
 
 export async function rentalStartedProducer(
   components: Pick<AppComponents, 'config' | 'landManagerSubGraph' | 'rentalsSubGraph'>
@@ -101,14 +100,14 @@ export async function rentalStartedProducer(
     }
 
     return {
-      notificationType: notificationType,
+      eventType,
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    notificationType,
+    eventType,
     run
   }
 }

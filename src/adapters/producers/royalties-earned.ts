@@ -1,4 +1,3 @@
-import { NotificationType } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
 import { AppComponents, EventType, IEventGenerator, RoyaltiesEarnedEvent } from '../../types'
 
@@ -84,7 +83,7 @@ type SalesResponse = {
   }[]
 }
 
-const notificationType = NotificationType.ROYALTIES_EARNED
+const eventType = EventType.ROYALTIES_EARNED
 
 export async function royaltiesEarnedProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
@@ -137,14 +136,14 @@ export async function royaltiesEarnedProducer(
     } while (result.sales.length === PAGE_SIZE)
 
     return {
-      notificationType: notificationType,
+      eventType: eventType,
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    notificationType,
+    eventType,
     run
   }
 }

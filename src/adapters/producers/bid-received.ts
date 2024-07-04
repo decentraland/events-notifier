@@ -1,4 +1,3 @@
-import { NotificationType } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
 import { AppComponents, BidReceivedEvent, EventType, IEventGenerator } from '../../types'
 
@@ -78,7 +77,7 @@ type BidsResponse = {
   }[]
 }
 
-const notificationType = NotificationType.BID_RECEIVED
+const eventType = EventType.BID_RECEIVED
 
 export async function bidReceivedProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
@@ -131,14 +130,14 @@ export async function bidReceivedProducer(
     } while (result.bids.length === PAGE_SIZE)
 
     return {
-      notificationType: notificationType,
+      eventType,
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    notificationType,
+    eventType,
     run
   }
 }

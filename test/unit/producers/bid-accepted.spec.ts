@@ -45,26 +45,25 @@ describe('bid accepted producer', () => {
     const producer = await bidAcceptedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'bid_accepted',
+      eventType: 'bid-accepted',
       records: [
         {
-          type: 'bid_accepted',
-          address: '0x24e5f44999c151f08609f8e27b2238c773c4d020',
-          eventKey: '0x840df86c97afbeca305f1aa4009496abb48f2a58bf037ee6aaae2d6bd64511dc',
+          type: 'bid-accepted',
+          key: '0x840df86c97afbeca305f1aa4009496abb48f2a58bf037ee6aaae2d6bd64511dc',
+          timestamp: 1701379983000,
           metadata: {
+            address: '0x24e5f44999c151f08609f8e27b2238c773c4d020',
+            image: 'https://peer.decentraland.zone/lambdas/collections/contents/urn:decentraland:mumbai:collections-v2:0x5d670bab052f21c3b1984231b1187be34852db24:1/thumbnail',
+            seller: '0xb2a01607d2c1a36027cf7f37cb765ea010ff6300',
             category: 'wearable',
-            description: 'Your bid for 20.00 MANA for this Smart Wearable Example II was accepted.',
-            image:
-              'https://peer.decentraland.zone/lambdas/collections/contents/urn:decentraland:mumbai:collections-v2:0x5d670bab052f21c3b1984231b1187be34852db24:1/thumbnail',
+            rarity: 'mythic',
             link: 'https://marketplace-url/contracts/0x5d670bab052f21c3b1984231b1187be34852db24/tokens/105312291668557186697918027683670432318895095400549111254310977537',
-            network: 'polygon',
             nftName: 'Smart Wearable Example II',
             price: '20000000000000000000',
-            rarity: 'mythic',
-            seller: '0xb2a01607d2c1a36027cf7f37cb765ea010ff6300',
-            title: 'Bid Accepted'
-          },
-          timestamp: 1701379983000
+            title: 'Bid Accepted',
+            description: 'Your bid for 20.00 MANA for this Smart Wearable Example II was accepted.',
+            network: 'polygon'
+          }
         }
       ],
       lastRun: expect.anything()
@@ -85,7 +84,7 @@ describe('bid accepted producer', () => {
     const producer = await bidAcceptedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'bid_accepted',
+      eventType: 'bid-accepted',
       records: [],
       lastRun: expect.anything()
     })

@@ -6,7 +6,6 @@ import type {
   ILoggerComponent,
   IMetricsComponent
 } from '@well-known-components/interfaces'
-import { NotificationType } from '@dcl/schemas'
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 
 import { metricDeclarations } from './metrics'
@@ -55,30 +54,21 @@ export type DatabaseComponent = {
   updateLastUpdateForNotificationType(notificationType: string, timestamp: number): Promise<void>
 }
 
-export type NotificationRecord = {
-  id?: string
-  eventKey: string
-  type: NotificationType
-  address: string
-  metadata: any
-  timestamp: number
-}
-
 export type IEventProducerResult = {
-  notificationType: string
+  eventType: string
   records: EventNotification[]
   lastRun: number
 }
 
 export type IEventProducer = {
   start: () => Promise<void>
-  notificationType: () => string
+  eventType: () => string
   runProducerSinceDate(date: number): Promise<void>
 }
 
 export type IEventGenerator = {
   run(since: number): Promise<IEventProducerResult>
-  notificationType: NotificationType
+  eventType: EventType
 }
 
 export type IProducerRegistry = IBaseComponent & {

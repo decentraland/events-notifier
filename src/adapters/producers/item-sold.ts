@@ -1,4 +1,3 @@
-import { NotificationType } from '@dcl/schemas'
 import { AppComponents, EventType, IEventGenerator, ItemSoldEvent } from '../../types'
 
 export const PAGE_SIZE = 1000
@@ -79,7 +78,7 @@ type SalesResponse = {
   }[]
 }
 
-const notificationType = NotificationType.ITEM_SOLD
+const eventType = EventType.ITEM_SOLD
 
 export async function itemSoldProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
@@ -129,14 +128,14 @@ export async function itemSoldProducer(
     } while (result.sales.length === PAGE_SIZE)
 
     return {
-      notificationType: notificationType,
+      eventType,
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    notificationType,
+    eventType,
     run
   }
 }

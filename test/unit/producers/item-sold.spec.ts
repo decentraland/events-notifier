@@ -46,25 +46,24 @@ describe('item sold producer', () => {
     const producer = await itemSoldProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'item_sold',
+      eventType: 'item-sold',
       records: [
         {
-          type: 'item_sold',
-          address: '0xb2a01607d2c1a36027cf7f37cb765ea010ff6300',
-          eventKey: '0x94c46b04779d7b62938dc055322de356d923b518c00aa13815880c0984f324b1',
+          type: 'item-sold',
+          key: '0x94c46b04779d7b62938dc055322de356d923b518c00aa13815880c0984f324b1',
+          timestamp: 1701717552000,
           metadata: {
-            category: 'wearable',
-            description: 'You just sold this Watch.',
-            image:
-              'https://peer.decentraland.zone/lambdas/collections/contents/urn:decentraland:mumbai:collections-v2:0x4e43e8f726c5e81d8aa80db6b180d427e292e6a6:0/thumbnail',
-            link: 'https://marketplace-url/contracts/0x4e43e8f726c5e81d8aa80db6b180d427e292e6a6/tokens/1',
-            network: 'polygon',
-            nftName: 'Watch',
-            rarity: 'common',
+            address: '0xb2a01607d2c1a36027cf7f37cb765ea010ff6300',
+            image: 'https://peer.decentraland.zone/lambdas/collections/contents/urn:decentraland:mumbai:collections-v2:0x4e43e8f726c5e81d8aa80db6b180d427e292e6a6:0/thumbnail',
             seller: '0xb2a01607d2c1a36027cf7f37cb765ea010ff6300',
-            title: 'Item Sold'
-          },
-          timestamp: 1701717552000
+            category: 'wearable',
+            rarity: 'common',
+            link: 'https://marketplace-url/contracts/0x4e43e8f726c5e81d8aa80db6b180d427e292e6a6/tokens/1',
+            nftName: 'Watch',
+            title: 'Item Sold',
+            description: 'You just sold this Watch.',
+            network: 'polygon'
+          }
         }
       ],
       lastRun: expect.anything()
@@ -85,7 +84,7 @@ describe('item sold producer', () => {
     const producer = await itemSoldProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      notificationType: 'item_sold',
+      eventType: 'item-sold',
       records: [],
       lastRun: expect.anything()
     })
