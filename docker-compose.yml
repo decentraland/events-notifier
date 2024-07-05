@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: "blockchain_event_notifier_db"
+    image: 'postgres:latest'
+    restart: always
+    user: postgres
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass1234
+      - POSTGRES_DB=blockchain_event_notifier_db
+    ports:
+      - '5455:5432'
+volumes:
+  postgres_volume:
