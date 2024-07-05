@@ -1,4 +1,3 @@
-import path from 'path'
 import { createDotEnvConfigComponent } from '@well-known-components/env-config-provider'
 import { createMetricsComponent } from '@well-known-components/metrics'
 import { createLogComponent } from '@well-known-components/logger'
@@ -41,7 +40,6 @@ export async function initComponents(): Promise<AppComponents> {
     databaseUrl = `postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabaseName}`
   }
 
-  console.log({ databaseUrl })
   // This worker writes to the database, so it runs the migrations
   const pg = await createPgComponent({ logs, config, metrics })
 

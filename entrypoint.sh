@@ -1,7 +1,4 @@
 #!/bin/sh
-# ./node_modules/.bin/node-pg-migrate -m lib/migrations -d CONNECTION_STRING up && NODE_ENV=production node lib/server.js
-
-#!/bin/sh
 
 finish() {
   echo "killing service..."
