@@ -10,7 +10,8 @@ export async function setupRouter({ components }: GlobalContext): Promise<Router
   const { config } = components
 
   const signingKey = await config.getString('SIGNING_KEY')
-  if (signingKey) {
+  const isProdEnvironment = (await config.getString('NETWORK'))?.toLocaleLowerCase() === 'mainnet'
+  if (signingKey && !isProdEnvironment) {
     router.post('/producers/:producer/set-since', bearerTokenMiddleware(signingKey), setCursorHandler)
   }
 
