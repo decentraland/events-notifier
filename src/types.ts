@@ -19,14 +19,14 @@ export type BaseComponents = {
   config: IConfigComponent
   logs: ILoggerComponent
   metrics: IMetricsComponent<keyof typeof metricDeclarations>
+  fetch: IFetchComponent
+  producerRegistry: IProducerRegistry
 }
 
 // components used in runtime
 export type AppComponents = BaseComponents & {
-  fetch: IFetchComponent
   database: DatabaseComponent
   eventPublisher: IEventPublisher
-  producerRegistry: IProducerRegistry
   l2CollectionsSubGraph: ISubgraphComponent
   landManagerSubGraph: ISubgraphComponent
   marketplaceSubGraph: ISubgraphComponent
