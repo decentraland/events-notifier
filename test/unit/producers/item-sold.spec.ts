@@ -46,10 +46,14 @@ describe('item sold producer', () => {
     const producer = await itemSoldProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'item-sold',
+      event: {
+        type: 'blockchain',
+        subType: 'item-sold'
+      },
       records: [
         {
-          type: 'item-sold',
+          type: 'blockchain',
+          subType: 'item-sold',
           key: '0x94c46b04779d7b62938dc055322de356d923b518c00aa13815880c0984f324b1',
           timestamp: 1701717552000,
           metadata: {
@@ -84,7 +88,10 @@ describe('item sold producer', () => {
     const producer = await itemSoldProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'item-sold',
+      event: {
+        type: 'blockchain',
+        subType: 'item-sold'
+      },
       records: [],
       lastRun: expect.anything()
     })

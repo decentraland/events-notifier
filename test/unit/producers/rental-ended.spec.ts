@@ -43,10 +43,14 @@ describe('rental ended producer', () => {
     const producer = await rentalEndedProducer({ config, landManagerSubGraph, rentalsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'land-rental-ended',
+      event: {
+        type: 'blockchain',
+        subType: 'land-rental-ended'
+      },
       records: [
         {
-          type: 'land-rental-ended',
+          type: 'blockchain',
+          subType: 'land-rental-ended',
           key: '0x42f4ba48791e2de32f5fbf553441c2672864bb33:random-token-id:1',
           timestamp: 1710447420000,
           metadata: {
@@ -87,7 +91,10 @@ describe('rental ended producer', () => {
     const producer = await rentalEndedProducer({ config, landManagerSubGraph, rentalsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'land-rental-ended',
+      event: {
+        type: 'blockchain',
+        subType: 'land-rental-ended'
+      },
       records: [],
       lastRun: expect.anything()
     })
