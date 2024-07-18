@@ -6,7 +6,7 @@ export async function createProducer(
   producer: IEventGenerator
 ): Promise<IEventProducer> {
   const { logs, database, eventPublisher } = components
-  const logger = logs.getLogger(`producer-${producer.eventType}`)
+  const logger = logs.getLogger(`${producer.event.subType}-producer-${producer.event.subType}`)
 
   let lastSuccessfulRun: number | undefined
 
@@ -14,7 +14,7 @@ export async function createProducer(
     logger.info(`Checking for updates since ${lastSuccessfulRun}.`)
 
     const produced = await producer.run(lastSuccessfulRun)
-    await database.updateLastUpdateForEventType(produced.eventType, produced.lastRun)
+    await database.updateLastUpdateForEventType(produced.event.subType, produced.lastRun)
 
     for (const event of produced.records) {
       await eventPublisher.publishMessage(event)
@@ -25,14 +25,14 @@ export async function createProducer(
   }
 
   async function start(): Promise<void> {
-    logger.info(`Scheduling producer for ${producer.eventType}.`)
+    logger.info(`Scheduling producer for ${producer.event.subType}.`)
 
     const job = new CronJob(
       '0 * * * * *',
       async function () {
         try {
           if (!lastSuccessfulRun) {
-            lastSuccessfulRun = await database.fetchLastUpdateForEventType(producer.eventType)
+            lastSuccessfulRun = await database.fetchLastUpdateForEventType(producer.event.subType)
           }
           lastSuccessfulRun = await runProducer(lastSuccessfulRun!)
         } catch (e: any) {
@@ -48,7 +48,7 @@ export async function createProducer(
 
   return {
     start,
-    eventType: () => producer.eventType,
+    eventSubType: () => producer.event.subType,
     runProducerSinceDate: async (date: number) => {
       await runProducer(date)
     }

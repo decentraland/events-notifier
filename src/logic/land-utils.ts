@@ -1,6 +1,6 @@
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 import { l1Contracts, L1Network } from '@dcl/catalyst-contracts'
-import { RentalEndedEvent, RentalStartedEvent } from '../types'
+import { RentalEndedEvent, RentalStartedEvent } from '@dcl/schemas'
 
 const LAND_AND_ESTATE_QUERY = `
     query LandsAndEstates($landTokenIds: [BigInt!], $estateTokenIds: [ID!]) {

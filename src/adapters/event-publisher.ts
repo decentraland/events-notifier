@@ -1,5 +1,6 @@
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
-import { AppComponents, EventNotification, IEventPublisher } from '../types'
+import { AppComponents, IEventPublisher } from '../types'
+import { Event } from '@dcl/schemas'
 
 export async function createEventPublisher({ config }: Pick<AppComponents, 'config'>): Promise<IEventPublisher> {
   const snsArn = await config.requireString('AWS_SNS_ARN')
@@ -9,7 +10,7 @@ export async function createEventPublisher({ config }: Pick<AppComponents, 'conf
     endpoint: optionalEndpoint
   })
 
-  async function publishMessage(event: EventNotification): Promise<string | undefined> {
+  async function publishMessage(event: Event): Promise<string | undefined> {
     const { MessageId } = await client.send(
       new PublishCommand({
         TopicArn: snsArn,

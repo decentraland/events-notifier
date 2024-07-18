@@ -6,7 +6,7 @@ import { createPgComponent } from '@well-known-components/pg-component'
 import { createFetchComponent } from '@dcl/platform-server-commons'
 
 import { metricDeclarations } from './metrics'
-import { AppComponents } from './types'
+import { AppComponents, GlobalContext } from './types'
 import { createProducerRegistry } from './adapters/producer-registry'
 import { itemSoldProducer } from './adapters/producers/item-sold'
 import { royaltiesEarnedProducer } from './adapters/producers/royalties-earned'
@@ -17,11 +17,22 @@ import { rentalEndedProducer } from './adapters/producers/rental-ended'
 import { createProducer } from './adapters/create-producer'
 import { createEventPublisher } from './adapters/event-publisher'
 import { createDatabaseComponent } from './adapters/database'
+import { createServerComponent } from '@well-known-components/http-server'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
   const config = await createDotEnvConfigComponent({ path: ['.env.default', '.env.local', '.env'] })
   const logs = await createLogComponent({ config })
+
+  const server = await createServerComponent<GlobalContext>(
+    { config, logs },
+    {
+      cors: {
+        methods: ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'POST', 'PUT'],
+        maxAge: 86400
+      }
+    }
+  )
 
   const logger = logs.getLogger('components')
   const commitHash = (await config.getString('COMMIT_HASH')) || 'unknown'
@@ -101,6 +112,7 @@ export async function initComponents(): Promise<AppComponents> {
   return {
     config,
     logs,
+    server,
     metrics,
     database,
     fetch,

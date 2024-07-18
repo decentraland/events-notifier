@@ -1,7 +1,8 @@
 import { L1Network } from '@dcl/catalyst-contracts'
-import { AppComponents, EventType, IEventGenerator, RentalEndedEvent } from '../../types'
+import { AppComponents, IEventGenerator } from '../../types'
 import { chunks } from '../../logic/utils'
 import { findCoordinatesForLandTokenId } from '../../logic/land-utils'
+import { EventSubType, EventType, RentalEndedEvent } from '@dcl/schemas'
 
 export const PAGE_SIZE = 1000
 
@@ -38,8 +39,6 @@ type RentalsResponse = {
   }[]
 }
 
-const eventType = EventType.RENTAL_ENDED
-
 export async function rentalEndedProducer(
   components: Pick<AppComponents, 'config' | 'landManagerSubGraph' | 'rentalsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -69,7 +68,8 @@ export async function rentalEndedProducer(
 
       for (const rental of result.rentals) {
         const event: RentalEndedEvent = {
-          type: EventType.RENTAL_ENDED,
+          type: EventType.BLOCKCHAIN,
+          subType: EventSubType.RENTAL_ENDED,
           key: rental.id,
           timestamp: parseInt(rental.startedAt) * 1000,
           metadata: {
@@ -100,14 +100,20 @@ export async function rentalEndedProducer(
     }
 
     return {
-      eventType,
+      event: {
+        type: EventType.BLOCKCHAIN,
+        subType: EventSubType.RENTAL_ENDED
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: EventType.BLOCKCHAIN,
+      subType: EventSubType.RENTAL_ENDED
+    },
     run
   }
 }

@@ -6,11 +6,11 @@ export async function createProducerRegistry(components: Pick<AppComponents, 'lo
   const logger = logs.getLogger('producer-registry')
 
   function addProducer(producer: IEventProducer) {
-    if (producers.has(producer.eventType())) {
-      throw new Error(`Producer for ${producer.eventType} already exists`)
+    if (producers.has(producer.eventSubType())) {
+      throw new Error(`Producer for ${producer.eventSubType} already exists`)
     }
-    logger.info(`Adding producer for ${producer.eventType()}.`)
-    producers.set(producer.eventType(), producer)
+    logger.info(`Adding producer for ${producer.eventSubType()}.`)
+    producers.set(producer.eventSubType(), producer)
   }
 
   async function start(): Promise<void> {
