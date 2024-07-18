@@ -1,5 +1,4 @@
-import { BidAcceptedEvent, CollectionCreatedEvent, EventSubType, EventType } from '@dcl/schemas'
-import { formatMana } from '../../logic/utils'
+import { CollectionCreatedEvent, EventSubType, EventType } from '@dcl/schemas'
 import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
@@ -29,8 +28,8 @@ type CollectionResponse = {
   }[]
 }
 
-export async function bidAcceptedProducer(
-  components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
+export async function collectionCreatedProducer(
+  components: Pick<AppComponents, 'l2CollectionsSubGraph'>
 ): Promise<IEventGenerator> {
   const { l2CollectionsSubGraph } = components
 

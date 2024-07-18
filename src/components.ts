@@ -18,6 +18,7 @@ import { createProducer } from './adapters/create-producer'
 import { createEventPublisher } from './adapters/event-publisher'
 import { createDatabaseComponent } from './adapters/database'
 import { createServerComponent } from '@well-known-components/http-server'
+import { collectionCreatedProducer } from './adapters/producers/collection-created'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
@@ -107,6 +108,9 @@ export async function initComponents(): Promise<AppComponents> {
       { logs, database, eventPublisher },
       await rentalEndedProducer({ config, landManagerSubGraph, rentalsSubGraph })
     )
+  )
+  producerRegistry.addProducer(
+    await createProducer({ logs, database, eventPublisher }, await collectionCreatedProducer({ l2CollectionsSubGraph }))
   )
 
   return {
