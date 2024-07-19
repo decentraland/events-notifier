@@ -9,7 +9,7 @@ import type {
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 
 import { metricDeclarations } from './metrics'
-import { Event, EventSubType, EventType } from '@dcl/schemas'
+import { Event, Events } from '@dcl/schemas'
 
 export type GlobalContext = {
   components: BaseComponents
@@ -58,8 +58,8 @@ export type DatabaseComponent = {
 
 export type IEventProducerResult = {
   event: {
-    type: EventType
-    subType: EventSubType
+    type: Events.Type
+    subType: Events.SubType.Blockchain
   }
   records: Event[]
   lastRun: number
@@ -74,8 +74,8 @@ export type IEventProducer = {
 export type IEventGenerator = {
   run(since: number): Promise<IEventProducerResult>
   event: {
-    type: EventType
-    subType: EventSubType
+    type: Events.Type
+    subType: Events.SubType.Blockchain
   }
 }
 

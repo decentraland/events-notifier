@@ -1,4 +1,4 @@
-import { EventSubType, EventType, ItemSoldEvent } from '@dcl/schemas'
+import { Events, ItemSoldEvent } from '@dcl/schemas'
 import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
@@ -104,8 +104,8 @@ export async function itemSoldProducer(
 
       for (const sale of result.sales) {
         const event: ItemSoldEvent = {
-          type: EventType.BLOCKCHAIN,
-          subType: EventSubType.ITEM_SOLD,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.ITEM_SOLD,
           key: sale.txHash,
           timestamp: sale.timestamp * 1000,
           metadata: {
@@ -129,8 +129,8 @@ export async function itemSoldProducer(
 
     return {
       event: {
-        type: EventType.BLOCKCHAIN,
-        subType: EventSubType.ITEM_SOLD
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.ITEM_SOLD
       },
       records: produced,
       lastRun: now
@@ -139,8 +139,8 @@ export async function itemSoldProducer(
 
   return {
     event: {
-      type: EventType.BLOCKCHAIN,
-      subType: EventSubType.ITEM_SOLD
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.ITEM_SOLD
     },
     run
   }

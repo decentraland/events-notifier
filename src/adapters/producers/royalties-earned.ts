@@ -1,4 +1,4 @@
-import { EventSubType, EventType, RoyaltiesEarnedEvent } from '@dcl/schemas'
+import { Events, RoyaltiesEarnedEvent } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
 import { AppComponents, IEventGenerator } from '../../types'
 
@@ -109,8 +109,8 @@ export async function royaltiesEarnedProducer(
 
       for (const sale of result.sales) {
         const event: RoyaltiesEarnedEvent = {
-          type: EventType.BLOCKCHAIN,
-          subType: EventSubType.ROYALTIES_EARNED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.ROYALTIES_EARNED,
           key: sale.txHash,
           timestamp: sale.timestamp * 1000,
           metadata: {
@@ -137,8 +137,8 @@ export async function royaltiesEarnedProducer(
 
     return {
       event: {
-        type: EventType.BLOCKCHAIN,
-        subType: EventSubType.ROYALTIES_EARNED
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.ROYALTIES_EARNED
       },
       records: produced,
       lastRun: now
@@ -147,8 +147,8 @@ export async function royaltiesEarnedProducer(
 
   return {
     event: {
-      type: EventType.BLOCKCHAIN,
-      subType: EventSubType.ROYALTIES_EARNED
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.ROYALTIES_EARNED
     },
     run
   }

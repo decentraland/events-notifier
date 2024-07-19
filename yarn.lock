@@ -774,9 +774,9 @@
     "@well-known-components/interfaces" "^1.4.2"
     node-fetch "^2.7.0"
 
-"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/catalyst-deployments/dcl-schemas-12.0.1-9995180541.commit-6569814.tgz":
-  version "12.0.1-9995180541.commit-6569814"
-  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/catalyst-deployments/dcl-schemas-12.0.1-9995180541.commit-6569814.tgz#649e6f701067818a42b2d6165cf188c011e870e2"
+"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/catalyst-deployments/dcl-schemas-12.0.1-10009173517.commit-348c7d3.tgz":
+  version "12.0.1-10009173517.commit-348c7d3"
+  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/catalyst-deployments/dcl-schemas-12.0.1-10009173517.commit-348c7d3.tgz#61f89349400876f71564b974a0c3013c3f3353b8"
   dependencies:
     ajv "^8.11.0"
     ajv-errors "^3.0.0"

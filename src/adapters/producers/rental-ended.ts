@@ -2,7 +2,7 @@ import { L1Network } from '@dcl/catalyst-contracts'
 import { AppComponents, IEventGenerator } from '../../types'
 import { chunks } from '../../logic/utils'
 import { findCoordinatesForLandTokenId } from '../../logic/land-utils'
-import { EventSubType, EventType, RentalEndedEvent } from '@dcl/schemas'
+import { Events, RentalEndedEvent } from '@dcl/schemas'
 
 export const PAGE_SIZE = 1000
 
@@ -68,8 +68,8 @@ export async function rentalEndedProducer(
 
       for (const rental of result.rentals) {
         const event: RentalEndedEvent = {
-          type: EventType.BLOCKCHAIN,
-          subType: EventSubType.RENTAL_ENDED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.RENTAL_ENDED,
           key: rental.id,
           timestamp: parseInt(rental.startedAt) * 1000,
           metadata: {
@@ -101,8 +101,8 @@ export async function rentalEndedProducer(
 
     return {
       event: {
-        type: EventType.BLOCKCHAIN,
-        subType: EventSubType.RENTAL_ENDED
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.RENTAL_ENDED
       },
       records: produced,
       lastRun: now
@@ -111,8 +111,8 @@ export async function rentalEndedProducer(
 
   return {
     event: {
-      type: EventType.BLOCKCHAIN,
-      subType: EventSubType.RENTAL_ENDED
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.RENTAL_ENDED
     },
     run
   }

@@ -6,7 +6,7 @@ export async function createProducer(
   producer: IEventGenerator
 ): Promise<IEventProducer> {
   const { logs, database, eventPublisher } = components
-  const logger = logs.getLogger(`${producer.event.subType}-producer-${producer.event.subType}`)
+  const logger = logs.getLogger(`${producer.event.type}-producer-${producer.event.subType}`)
 
   let lastSuccessfulRun: number | undefined
 

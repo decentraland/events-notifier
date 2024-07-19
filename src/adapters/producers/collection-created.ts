@@ -1,10 +1,10 @@
-import { CollectionCreatedEvent, EventSubType, EventType } from '@dcl/schemas'
+import { CollectionCreatedEvent, Events } from '@dcl/schemas'
 import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
 const COLLECTIONS_QUERY = `
-    query Collections {
+    query Collections($since: BigInt!, $paginationId: ID) {
         collections(
             where: {updatedAt_gte: $since, id_gt: $paginationId}
             orderBy: id
@@ -51,8 +51,8 @@ export async function collectionCreatedProducer(
 
       for (const collection of result.collections) {
         const event: CollectionCreatedEvent = {
-          type: EventType.BLOCKCHAIN,
-          subType: EventSubType.COLLECTION_CREATED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.COLLECTION_CREATED,
           key: collection.id,
           timestamp: collection.updatedAt * 1000,
           metadata: {
@@ -68,8 +68,8 @@ export async function collectionCreatedProducer(
 
     return {
       event: {
-        type: EventType.BLOCKCHAIN,
-        subType: EventSubType.COLLECTION_CREATED
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.COLLECTION_CREATED
       },
       records: produced,
       lastRun: now
@@ -78,8 +78,8 @@ export async function collectionCreatedProducer(
 
   return {
     event: {
-      type: EventType.BLOCKCHAIN,
-      subType: EventSubType.COLLECTION_CREATED
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.COLLECTION_CREATED
     },
     run
   }
