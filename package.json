@@ -19,7 +19,7 @@
     "@aws-sdk/client-sns": "^3.609.0",
     "@dcl/catalyst-contracts": "^4.4.1",
     "@dcl/platform-server-commons": "^0.0.4",
-    "@dcl/schemas": "^13.0.0",
+    "@dcl/schemas": "^13.2.1",
     "@well-known-components/env-config-provider": "^1.2.0",
     "@well-known-components/http-server": "^2.1.0",
     "@well-known-components/interfaces": "^1.4.3",
