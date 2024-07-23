@@ -48,10 +48,14 @@ describe('royalties earned producer', () => {
     const producer = await royaltiesEarnedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'royalties-earned',
+      event: {
+        type: 'blockchain',
+        subType: 'royalties-earned'
+      },
       records: [
         {
-          type: 'royalties-earned',
+          type: 'blockchain',
+          subType: 'royalties-earned',
           key: '0x707a2f0f9a8e5f4083e2a36207cd0e5a3a89ec4f6513202f5d4b2dd993c17571',
           timestamp: 1653065866000,
           metadata: {
@@ -87,7 +91,10 @@ describe('royalties earned producer', () => {
     const producer = await royaltiesEarnedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'royalties-earned',
+      event: {
+        type: 'blockchain',
+        subType: 'royalties-earned'
+      },
       records: [],
       lastRun: expect.anything()
     })

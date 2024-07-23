@@ -45,10 +45,14 @@ describe('bid received producer', () => {
     const producer = await bidReceivedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'bid-received',
+      event: {
+        type: 'blockchain',
+        subType: 'bid-received'
+      },
       records: [
         {
-          type: 'bid-received',
+          type: 'blockchain',
+          subType: 'bid-received',
           key: '0x840df86c97afbeca305f1aa4009496abb48f2a58bf037ee6aaae2d6bd64511dc',
           timestamp: 1701367617000,
           metadata: {
@@ -84,7 +88,10 @@ describe('bid received producer', () => {
     const producer = await bidReceivedProducer({ config, l2CollectionsSubGraph })
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
-      eventType: 'bid-received',
+      event: {
+        type: 'blockchain',
+        subType: 'bid-received'
+      },
       records: [],
       lastRun: expect.anything()
     })

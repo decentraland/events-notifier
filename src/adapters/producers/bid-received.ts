@@ -1,5 +1,6 @@
+import { BidReceivedEvent, Events } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
-import { AppComponents, BidReceivedEvent, EventType, IEventGenerator } from '../../types'
+import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -77,8 +78,6 @@ type BidsResponse = {
   }[]
 }
 
-const eventType = EventType.BID_RECEIVED
-
 export async function bidReceivedProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -104,7 +103,8 @@ export async function bidReceivedProducer(
 
       for (const bid of result.bids) {
         const event: BidReceivedEvent = {
-          type: EventType.BID_RECEIVED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.BID_RECEIVED,
           key: bid.blockchainId,
           timestamp: bid.createdAt * 1000,
           metadata: {
@@ -130,14 +130,20 @@ export async function bidReceivedProducer(
     } while (result.bids.length === PAGE_SIZE)
 
     return {
-      eventType,
+      event: {
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.BID_RECEIVED
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.BID_RECEIVED
+    },
     run
   }
 }

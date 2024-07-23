@@ -1,7 +1,8 @@
 import { L1Network } from '@dcl/catalyst-contracts'
-import { AppComponents, EventType, IEventGenerator, RentalStartedEvent } from '../../types'
+import { AppComponents, IEventGenerator } from '../../types'
 import { chunks } from '../../logic/utils'
 import { findCoordinatesForLandTokenId } from '../../logic/land-utils'
+import { Events, RentalStartedEvent } from '@dcl/schemas'
 
 export const PAGE_SIZE = 1000
 
@@ -38,8 +39,6 @@ type RentalsResponse = {
   }[]
 }
 
-const eventType = EventType.RENTAL_STARTED
-
 export async function rentalStartedProducer(
   components: Pick<AppComponents, 'config' | 'landManagerSubGraph' | 'rentalsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -69,7 +68,8 @@ export async function rentalStartedProducer(
 
       for (const rental of result.rentals) {
         const event: RentalStartedEvent = {
-          type: EventType.RENTAL_STARTED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.RENTAL_STARTED,
           key: rental.id,
           timestamp: parseInt(rental.startedAt) * 1000,
           metadata: {
@@ -100,14 +100,20 @@ export async function rentalStartedProducer(
     }
 
     return {
-      eventType,
+      event: {
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.RENTAL_STARTED
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.RENTAL_STARTED
+    },
     run
   }
 }

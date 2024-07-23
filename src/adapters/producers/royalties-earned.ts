@@ -1,5 +1,6 @@
+import { Events, RoyaltiesEarnedEvent } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
-import { AppComponents, EventType, IEventGenerator, RoyaltiesEarnedEvent } from '../../types'
+import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -83,8 +84,6 @@ type SalesResponse = {
   }[]
 }
 
-const eventType = EventType.ROYALTIES_EARNED
-
 export async function royaltiesEarnedProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -110,7 +109,8 @@ export async function royaltiesEarnedProducer(
 
       for (const sale of result.sales) {
         const event: RoyaltiesEarnedEvent = {
-          type: EventType.ROYALTIES_EARNED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.ROYALTIES_EARNED,
           key: sale.txHash,
           timestamp: sale.timestamp * 1000,
           metadata: {
@@ -136,14 +136,20 @@ export async function royaltiesEarnedProducer(
     } while (result.sales.length === PAGE_SIZE)
 
     return {
-      eventType: eventType,
+      event: {
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.ROYALTIES_EARNED
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.ROYALTIES_EARNED
+    },
     run
   }
 }

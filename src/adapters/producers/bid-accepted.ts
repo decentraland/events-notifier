@@ -1,5 +1,6 @@
+import { BidAcceptedEvent, Events } from '@dcl/schemas'
 import { formatMana } from '../../logic/utils'
-import { AppComponents, BidAcceptedEvent, EventType, IEventGenerator } from '../../types'
+import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -77,8 +78,6 @@ type BidsResponse = {
   }[]
 }
 
-const eventType = EventType.BID_ACCEPTED
-
 export async function bidAcceptedProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -104,7 +103,8 @@ export async function bidAcceptedProducer(
 
       for (const bid of result.bids) {
         const event: BidAcceptedEvent = {
-          type: EventType.BID_ACCEPTED,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.BID_ACCEPTED,
           key: bid.blockchainId,
           timestamp: bid.updatedAt * 1000,
           metadata: {
@@ -130,14 +130,20 @@ export async function bidAcceptedProducer(
     } while (result.bids.length === PAGE_SIZE)
 
     return {
-      eventType,
+      event: {
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.BID_ACCEPTED
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.BID_ACCEPTED
+    },
     run
   }
 }

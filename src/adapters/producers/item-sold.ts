@@ -1,4 +1,5 @@
-import { AppComponents, EventType, IEventGenerator, ItemSoldEvent } from '../../types'
+import { Events, ItemSoldEvent } from '@dcl/schemas'
+import { AppComponents, IEventGenerator } from '../../types'
 
 export const PAGE_SIZE = 1000
 
@@ -78,8 +79,6 @@ type SalesResponse = {
   }[]
 }
 
-const eventType = EventType.ITEM_SOLD
-
 export async function itemSoldProducer(
   components: Pick<AppComponents, 'config' | 'l2CollectionsSubGraph'>
 ): Promise<IEventGenerator> {
@@ -105,7 +104,8 @@ export async function itemSoldProducer(
 
       for (const sale of result.sales) {
         const event: ItemSoldEvent = {
-          type: EventType.ITEM_SOLD,
+          type: Events.Type.BLOCKCHAIN,
+          subType: Events.SubType.Blockchain.ITEM_SOLD,
           key: sale.txHash,
           timestamp: sale.timestamp * 1000,
           metadata: {
@@ -128,14 +128,20 @@ export async function itemSoldProducer(
     } while (result.sales.length === PAGE_SIZE)
 
     return {
-      eventType,
+      event: {
+        type: Events.Type.BLOCKCHAIN,
+        subType: Events.SubType.Blockchain.ITEM_SOLD
+      },
       records: produced,
       lastRun: now
     }
   }
 
   return {
-    eventType,
+    event: {
+      type: Events.Type.BLOCKCHAIN,
+      subType: Events.SubType.Blockchain.ITEM_SOLD
+    },
     run
   }
 }

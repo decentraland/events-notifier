@@ -774,10 +774,10 @@
     "@well-known-components/interfaces" "^1.4.2"
     node-fetch "^2.7.0"
 
-"@dcl/schemas@^11.10.5":
-  version "11.10.5"
-  resolved "https://registry.yarnpkg.com/@dcl/schemas/-/schemas-11.10.5.tgz#f296536b3c59a6a81361e327d3ec5e61c92e68fa"
-  integrity sha512-/SqtrVh68lQF4iwe0HIU/egR076PPFpmp6NF6HpikKcHywS6xSi+IdMyI6uYdbT2jV3C9QmIB9foVBI0qsIsSA==
+"@dcl/schemas@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@dcl/schemas/-/schemas-13.0.0.tgz#737a0cc1f9d605565fe7d5f6d8b0bbeafb9ea315"
+  integrity sha512-LwO/gUGHt8YT7caq/funUrmvR2Z2HPTWkUYYEF9wepXVT4okn6ssFV81HPpCFz4EtR2op7rWwf3MnmJg2gMhlw==
   dependencies:
     ajv "^8.11.0"
     ajv-errors "^3.0.0"
@@ -1809,7 +1809,7 @@
   dependencies:
     dotenv "^16.0.1"
 
-"@well-known-components/http-server@^2.0.0":
+"@well-known-components/http-server@^2.0.0", "@well-known-components/http-server@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@well-known-components/http-server/-/http-server-2.1.0.tgz#23a18edc82904b3a575452c2d7e618c7da37a07f"
   integrity sha512-IHD7aLTA+9DYEchQubHDBwc4FmVEmQC+2TWbi8Tz+QlkiQdtndcuba8XHH+EwqlB5sna/EAJGZGXPxS7okcHKA==
