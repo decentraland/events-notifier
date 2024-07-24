@@ -4,6 +4,7 @@ import { createLogComponent } from '@well-known-components/logger'
 import { createSubgraphComponent } from '@well-known-components/thegraph-component'
 import { createPgComponent } from '@well-known-components/pg-component'
 import { createFetchComponent } from '@dcl/platform-server-commons'
+import path from 'path'
 
 import { metricDeclarations } from './metrics'
 import { AppComponents, GlobalContext } from './types'
@@ -53,7 +54,18 @@ export async function initComponents(): Promise<AppComponents> {
   }
 
   // This worker writes to the database, so it runs the migrations
-  const pg = await createPgComponent({ logs, config, metrics })
+  const pg = await createPgComponent(
+    { logs, config, metrics },
+    {
+      migration: {
+        databaseUrl,
+        dir: path.resolve(__dirname, 'migrations'),
+        migrationsTable: 'pgmigrations',
+        ignorePattern: '.*\\.map',
+        direction: 'up'
+      }
+    }
+  )
 
   const database = createDatabaseComponent({ pg })
 
