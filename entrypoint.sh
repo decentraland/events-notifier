@@ -17,7 +17,7 @@ dbDatabaseName=$PG_COMPONENT_PSQL_DATABASE
 databaseUrl="postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabaseName}"
 
 echo "running migrations"
-./node_modules/.bin/node-pg-migrate -m lib/migrations -d "$databaseUrl" up
+./node_modules/.bin/node-pg-migrate -m lib/migrations -d CONNECTION_STRING up
 
 echo "starting service..."
 /usr/local/bin/node --trace-warnings --abort-on-uncaught-exception --unhandled-rejections=strict dist/index.js &
