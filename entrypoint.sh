@@ -23,7 +23,7 @@ dbDatabaseName=$PG_COMPONENT_PSQL_DATABASE
 export CONNECTION_STRING="postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabaseName}"
 
 echo "running migrations"
-./node_modules/.bin/node-pg-migrate -m "$temp_migration_dir" -d "$CONNECTION_STRING" up
+./node_modules/.bin/node-pg-migrate -m "$temp_migration_dir" -d CONNECTION_STRING up
 
 rm -r "$temp_migration_dir"
 
