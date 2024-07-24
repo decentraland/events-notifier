@@ -14,7 +14,7 @@ dbPort=$PG_COMPONENT_PSQL_PORT
 dbDatabaseName=$PG_COMPONENT_PSQL_DATABASE
 
 # Build the CONNECTION_STRING
-databaseUrl="postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabaseName}"
+CONNECTION_STRING ="postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabaseName}"
 
 echo "running migrations"
 ./node_modules/.bin/node-pg-migrate -m lib/migrations -d CONNECTION_STRING up
