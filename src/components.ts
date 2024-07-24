@@ -4,6 +4,7 @@ import { createLogComponent } from '@well-known-components/logger'
 import { createSubgraphComponent } from '@well-known-components/thegraph-component'
 import { createPgComponent } from '@well-known-components/pg-component'
 import { createFetchComponent } from '@dcl/platform-server-commons'
+import path from 'path'
 
 import { metricDeclarations } from './metrics'
 import { AppComponents, GlobalContext } from './types'
