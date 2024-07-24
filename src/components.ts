@@ -54,18 +54,7 @@ export async function initComponents(): Promise<AppComponents> {
   }
 
   // This worker writes to the database, so it runs the migrations
-  const pg = await createPgComponent(
-    { logs, config, metrics },
-    {
-      migration: {
-        databaseUrl,
-        dir: path.resolve(__dirname, 'migrations'),
-        migrationsTable: 'pgmigrations',
-        ignorePattern: '.*\\.map',
-        direction: 'up'
-      }
-    }
-  )
+  const pg = await createPgComponent({ logs, config, metrics })
 
   const database = createDatabaseComponent({ pg })
 
