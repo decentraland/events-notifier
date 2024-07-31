@@ -17,7 +17,11 @@ import { rentalEndedProducer } from './adapters/producers/rental-ended'
 import { createProducer } from './adapters/create-producer'
 import { createEventPublisher } from './adapters/event-publisher'
 import { createDatabaseComponent } from './adapters/database'
-import { createServerComponent, instrumentHttpServerWithPromClientRegistry } from '@well-known-components/http-server'
+import {
+  createServerComponent,
+  createStatusCheckComponent,
+  instrumentHttpServerWithPromClientRegistry
+} from '@well-known-components/http-server'
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
 
 // Initialize all the components of the app
@@ -39,6 +43,7 @@ export async function initComponents(): Promise<AppComponents> {
   const commitHash = (await config.getString('COMMIT_HASH')) || 'unknown'
   logger.info(`Initializing components. Version: ${commitHash}`)
 
+  const statusChecks = await createStatusCheckComponent({ server, config })
   const metrics = await createMetricsComponent(metricDeclarations, { config })
   const fetch = await createFetchComponent()
   await instrumentHttpServerWithPromClientRegistry({ server, metrics, config, registry: metrics.registry! })
@@ -119,6 +124,7 @@ export async function initComponents(): Promise<AppComponents> {
     logs,
     server,
     metrics,
+    statusChecks,
     database,
     fetch,
     eventPublisher,

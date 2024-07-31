@@ -20,6 +20,7 @@ export type BaseComponents = {
   config: IConfigComponent
   logs: ILoggerComponent
   server: IHttpServerComponent<GlobalContext>
+  statusChecks: IBaseComponent
   metrics: IMetricsComponent<keyof typeof metricDeclarations>
   fetch: IFetchComponent
   producerRegistry: IProducerRegistry

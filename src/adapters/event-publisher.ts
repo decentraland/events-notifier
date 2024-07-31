@@ -7,7 +7,7 @@ export async function createEventPublisher({ config }: Pick<AppComponents, 'conf
   const optionalEndpoint = await config.getString('AWS_SNS_ENDPOINT')
 
   const client = new SNSClient({
-    endpoint: optionalEndpoint
+    endpoint: optionalEndpoint ? optionalEndpoint : undefined
   })
 
   async function publishMessage(event: Event): Promise<string | undefined> {
