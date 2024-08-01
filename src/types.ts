@@ -24,12 +24,12 @@ export type BaseComponents = {
   metrics: IMetricsComponent<keyof typeof metricDeclarations>
   fetch: IFetchComponent
   producerRegistry: IProducerRegistry
+  eventPublisher: IEventPublisher
 }
 
 // components used in runtime
 export type AppComponents = BaseComponents & {
   database: DatabaseComponent
-  eventPublisher: IEventPublisher
   l2CollectionsSubGraph: ISubgraphComponent
   landManagerSubGraph: ISubgraphComponent
   marketplaceSubGraph: ISubgraphComponent
