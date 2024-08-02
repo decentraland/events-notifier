@@ -5,22 +5,23 @@ enum ExplorerEventIds {
 }
 
 function parseExplorerClientEvent(event: any): Event | undefined {
-  if (event.body && (event.body.event as string).toLocaleLowerCase() === ExplorerEventIds.MOVE_TO_PARCEL) {
+  const parsedBody = !!event.body ? JSON.parse(event.body) : undefined
+  if (parsedBody && (parsedBody.event as string).toLocaleLowerCase() === ExplorerEventIds.MOVE_TO_PARCEL) {
     return {
       type: Events.Type.CLIENT,
       subType: Events.SubType.Client.MOVE_TO_PARCEL,
-      timestamp: event.body.timestamp,
-      key: event.body.messageId,
+      timestamp: parsedBody.timestamp,
+      key: parsedBody.messageId,
       metadata: {
-        authChain: JSON.parse(event.body.context.auth_chain),
-        userAddress: event.body.context.dcl_eth_address,
-        timestamp: event.body.sentAt,
-        realm: event.body.context.realm,
+        authChain: JSON.parse(parsedBody.context.auth_chain),
+        userAddress: parsedBody.context.dcl_eth_address,
+        timestamp: parsedBody.sentAt,
+        realm: parsedBody.context.realm,
         parcel: {
-          isEmptyParcel: event.body.properties.is_empty_parcel,
-          newParcel: event.body.properties.new_parcel,
-          oldParcel: event.body.properties.old_parcel,
-          sceneHash: event.body.properties.scene_hash
+          isEmptyParcel: parsedBody.properties.is_empty_parcel,
+          newParcel: parsedBody.properties.new_parcel,
+          oldParcel: parsedBody.properties.old_parcel,
+          sceneHash: parsedBody.properties.scene_hash
         }
       }
     } as MoveToParcelEvent
