@@ -1,3 +1,4 @@
+import { parseExplorerClientEvent } from '../../adapters/event-parser'
 import { HandlerContextWithPath } from '../../types'
 import crypto from 'crypto'
 
@@ -35,7 +36,41 @@ export async function setForwardExplorerEventsHandler(
   const signatureHeader = context.request.headers.get('x-signature')
   const result = validateIfSegmentIsTheSourceOfTheEvent(body, signatureHeader, segmentSignigKey)
 
-  logger.info('Forwarding event', { body, validationResult: result ? 'valid' : 'invalid' })
+  if (!result) {
+    logger.warn('Invalid signature', {
+      signatureHeader: signatureHeader ? signatureHeader : 'empty-signature',
+      body: JSON.stringify(body)
+    })
+    return {
+      status: 401,
+      body: {
+        error: 'Invalid signature',
+        ok: false
+      }
+    }
+  }
+
+  const parsedEvent = parseExplorerClientEvent(body)
+
+  if (!parsedEvent) {
+    logger.warn('Invalid event', {
+      body: JSON.stringify(body)
+    })
+    return {
+      status: 400,
+      body: {
+        error: 'Invalid event',
+        ok: false
+      }
+    }
+  }
+
+  await context.components.eventPublisher.publishMessage(parsedEvent)
+
+  logger.info('Event parsed and forwarded', {
+    parsedEvent: JSON.stringify(parsedEvent)
+  })
+
   return {
     status: 200,
     body: {
