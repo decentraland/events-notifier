@@ -103,8 +103,8 @@ export async function bidReceivedProducer(
 
       for (const bid of result.bids) {
         const event: BidReceivedEvent = {
-          type: Events.Type.BLOCKCHAIN,
-          subType: Events.SubType.Blockchain.BID_RECEIVED,
+          type: Events.Type.MARKETPLACE,
+          subType: Events.SubType.Marketplace.BID_RECEIVED,
           key: bid.blockchainId,
           timestamp: bid.createdAt * 1000,
           metadata: {
@@ -131,8 +131,8 @@ export async function bidReceivedProducer(
 
     return {
       event: {
-        type: Events.Type.BLOCKCHAIN,
-        subType: Events.SubType.Blockchain.BID_RECEIVED
+        type: Events.Type.MARKETPLACE,
+        subType: Events.SubType.Marketplace.BID_RECEIVED
       },
       records: produced,
       lastRun: now
@@ -141,8 +141,8 @@ export async function bidReceivedProducer(
 
   return {
     event: {
-      type: Events.Type.BLOCKCHAIN,
-      subType: Events.SubType.Blockchain.BID_RECEIVED
+      type: Events.Type.MARKETPLACE,
+      subType: Events.SubType.Marketplace.BID_RECEIVED
     },
     run
   }

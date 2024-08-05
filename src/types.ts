@@ -60,7 +60,7 @@ export type DatabaseComponent = {
 export type IEventProducerResult = {
   event: {
     type: Events.Type
-    subType: Events.SubType.Blockchain
+    subType: Events.SubType.Blockchain | Events.SubType.Marketplace
   }
   records: Event[]
   lastRun: number
@@ -76,7 +76,7 @@ export type IEventGenerator = {
   run(since: number): Promise<IEventProducerResult>
   event: {
     type: Events.Type
-    subType: Events.SubType.Blockchain
+    subType: Events.SubType.Blockchain | Events.SubType.Marketplace
   }
 }
 
