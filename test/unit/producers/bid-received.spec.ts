@@ -46,12 +46,12 @@ describe('bid received producer', () => {
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
       event: {
-        type: 'blockchain',
+        type: 'marketplace',
         subType: 'bid-received'
       },
       records: [
         {
-          type: 'blockchain',
+          type: 'marketplace',
           subType: 'bid-received',
           key: '0x840df86c97afbeca305f1aa4009496abb48f2a58bf037ee6aaae2d6bd64511dc',
           timestamp: 1701367617000,
@@ -89,7 +89,7 @@ describe('bid received producer', () => {
     let result = await producer.run(Date.now())
     expect(result).toMatchObject({
       event: {
-        type: 'blockchain',
+        type: 'marketplace',
         subType: 'bid-received'
       },
       records: [],
