@@ -19,6 +19,7 @@ function parseExplorerClientEvent(event: any): Event | undefined {
       metadata: {
         authChain: JSON.parse(event.context.auth_chain),
         userAddress: event.context.dcl_eth_address,
+        sessionId: event.context.session_id,
         timestamp: event.sentAt,
         realm: event.context.realm,
         parcel: {
