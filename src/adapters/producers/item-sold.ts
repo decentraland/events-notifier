@@ -111,6 +111,7 @@ export async function itemSoldProducer(
           metadata: {
             address: sale.seller,
             image: sale.nft.image,
+            buyer: sale.buyer,
             seller: sale.seller,
             category: sale.nft.category,
             rarity: sale.nft.metadata[sale.nft.category]?.rarity,
