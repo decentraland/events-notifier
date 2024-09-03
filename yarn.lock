@@ -774,19 +774,18 @@
     "@well-known-components/interfaces" "^1.4.2"
     node-fetch "^2.7.0"
 
-"@dcl/schemas@^13.4.0":
-  version "13.4.0"
-  resolved "https://registry.yarnpkg.com/@dcl/schemas/-/schemas-13.4.0.tgz#bf6fe3caf71c77233006b10ed7b896f9e49e4403"
-  integrity sha512-4lxkTQisiT1+6mfHgfOGxM6wDain3+dGnTgCr6wfXUMgOKsF7sUY6FeneUvZpu9Xm4yKYAUnyggPVvkHd6OKWA==
+"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691729624.commit-55e1da9.tgz":
+  version "13.8.6-10691729624.commit-55e1da9"
+  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691729624.commit-55e1da9.tgz#7ac41c468e18abc55e49e3587b51cc6d31f3a9ff"
   dependencies:
     ajv "^8.11.0"
     ajv-errors "^3.0.0"
     ajv-keywords "^5.1.0"
     mitt "^3.0.1"
 
-"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691729624.commit-55e1da9.tgz":
-  version "13.8.6-10691729624.commit-55e1da9"
-  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691729624.commit-55e1da9.tgz#7ac41c468e18abc55e49e3587b51cc6d31f3a9ff"
+"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691854072.commit-686bdfd.tgz":
+  version "13.8.6-10691854072.commit-686bdfd"
+  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/buyer-on-itemsoldevent/dcl-schemas-13.8.6-10691854072.commit-686bdfd.tgz#85df8e1b45f16aa0e31101e69a45b8a4f188c8cc"
   dependencies:
     ajv "^8.11.0"
     ajv-errors "^3.0.0"
