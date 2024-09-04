@@ -16,11 +16,7 @@ function validateIfSegmentIsTheSourceOfTheEvent(
     .update(Buffer.from(JSON.stringify(body), 'utf-8'))
     .digest('hex')
 
-  if (digest !== signatureHeader) {
-    return false
-  }
-
-  return true
+  return digest === signatureHeader
 }
 
 export async function setForwardExplorerEventsHandler(
