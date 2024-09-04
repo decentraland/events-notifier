@@ -111,6 +111,7 @@ export async function itemSoldProducer(
           metadata: {
             address: sale.seller,
             image: sale.nft.image,
+            buyer: sale.buyer,
             seller: sale.seller,
             category: sale.nft.category,
             rarity: sale.nft.metadata[sale.nft.category]?.rarity,
@@ -118,7 +119,8 @@ export async function itemSoldProducer(
             nftName: sale.nft.metadata[sale.nft.category]?.name,
             title: 'Item Sold',
             description: `You just sold this ${sale.nft.metadata[sale.nft.category]?.name}.`,
-            network: 'polygon'
+            network: 'polygon',
+            tokenId: sale.nft.tokenId
           }
         }
         produced.push(event)
