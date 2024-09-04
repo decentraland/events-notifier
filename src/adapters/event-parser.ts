@@ -5,11 +5,6 @@ enum ExplorerEventIds {
 }
 
 function parseExplorerClientEvent(event: any): Event | undefined {
-  //   console.log({ event })
-  //   const parsedBody = !!event ? JSON.parse(event) : undefined
-  //   console.log({ parsedBody })
-
-  console.log({ stringifiedEvent: JSON.stringify(event) })
   if (event && (event.event as string).toLocaleLowerCase() === ExplorerEventIds.MOVE_TO_PARCEL) {
     return {
       type: Events.Type.CLIENT,
