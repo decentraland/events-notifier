@@ -774,10 +774,18 @@
     "@well-known-components/interfaces" "^1.4.2"
     node-fetch "^2.7.0"
 
-"@dcl/schemas@^13.8.6":
-  version "13.8.6"
-  resolved "https://registry.yarnpkg.com/@dcl/schemas/-/schemas-13.8.6.tgz#ada9cf0c55544a622d2a2f0f76d206fceeaa5a43"
-  integrity sha512-n79qq6vT+95CY+o3wDroQ97q2vFuIRDKPcJI9S+RVOg9PyVYs8Z4bsHp6kqP2FhhscNLc85xEnIdD2/3SIh56A==
+"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/used-emote-event/dcl-schemas-13.8.7-10709104737.commit-b5779de.tgz":
+  version "13.8.7-10709104737.commit-b5779de"
+  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/used-emote-event/dcl-schemas-13.8.7-10709104737.commit-b5779de.tgz#0edc2d1663de9d2476bc1c7d7269004cfc248c2b"
+  dependencies:
+    ajv "^8.11.0"
+    ajv-errors "^3.0.0"
+    ajv-keywords "^5.1.0"
+    mitt "^3.0.1"
+
+"@dcl/schemas@https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/used-emote-event/dcl-schemas-13.8.7-10709290980.commit-b7f9c57.tgz":
+  version "13.8.7-10709290980.commit-b7f9c57"
+  resolved "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/used-emote-event/dcl-schemas-13.8.7-10709290980.commit-b7f9c57.tgz#7fa3dd906de4d50d701a7a42ee3123ddbabaabe4"
   dependencies:
     ajv "^8.11.0"
     ajv-errors "^3.0.0"
