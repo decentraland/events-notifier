@@ -1,8 +1,9 @@
-import { Event, Events, MoveToParcelEvent, UsedEmoteEvent } from '@dcl/schemas'
+import { Event, Events, MoveToParcelEvent, PassportOpenedEvent, UsedEmoteEvent } from '@dcl/schemas'
 
 enum ExplorerEventIds {
   MOVE_TO_PARCEL = 'move_to_parcel',
-  USED_EMOTE = 'used_emote'
+  USED_EMOTE = 'used_emote',
+  PASSPORT_OPENED = 'passport_opened'
 }
 
 function parseExplorerClientEvent(event: any): Event | undefined {
@@ -50,6 +51,25 @@ function parseExplorerClientEvent(event: any): Event | undefined {
         }
       }
     } as UsedEmoteEvent
+  }
+
+  if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.PASSPORT_OPENED) {
+    return {
+      type: Events.Type.CLIENT,
+      subType: Events.SubType.Client.PASSPORT_OPENED,
+      timestamp: new Date(event.timestamp).getTime(),
+      key: event.messageId,
+      metadata: {
+        authChain: JSON.parse(event.context.auth_chain),
+        userAddress: event.context.dcl_eth_address,
+        sessionId: event.context.session_id,
+        timestamp: event.sentAt,
+        realm: event.context.realm,
+        passport: {
+          receiver: event.properties.receiver
+        }
+      }
+    } as PassportOpenedEvent
   }
 
   return undefined
