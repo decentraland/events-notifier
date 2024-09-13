@@ -1,4 +1,4 @@
-import { Event, Events, MoveToParcelEvent, UsedEmoteEvent } from '@dcl/schemas'
+import { Event, Events, MoveToParcelEvent, PassportOpenedEvent, UsedEmoteEvent } from '@dcl/schemas'
 
 enum ExplorerEventIds {
   MOVE_TO_PARCEL = 'move_to_parcel',
@@ -69,7 +69,7 @@ function parseExplorerClientEvent(event: any): Event | undefined {
           receiver: event.properties.receiver
         }
       }
-    } as UsedEmoteEvent
+    } as PassportOpenedEvent
   }
 
   return undefined
