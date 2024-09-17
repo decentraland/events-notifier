@@ -66,7 +66,7 @@ function parseExplorerClientEvent(event: any): Event | undefined {
         timestamp: event.sentAt,
         realm: event.context.realm,
         passport: {
-          receiver: event.properties.receiver
+          receiver: event.properties.receiver_id
         }
       }
     } as PassportOpenedEvent
