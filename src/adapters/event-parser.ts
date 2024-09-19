@@ -1,9 +1,19 @@
-import { Event, Events, MoveToParcelEvent, PassportOpenedEvent, UsedEmoteEvent } from '@dcl/schemas'
+import {
+  Event,
+  Events,
+  MoveToParcelEvent,
+  PassportOpenedEvent,
+  UsedEmoteEvent,
+  VerticalHeightReachedEvent,
+  WalkedDistanceEvent
+} from '@dcl/schemas'
 
 enum ExplorerEventIds {
   MOVE_TO_PARCEL = 'move_to_parcel',
   USED_EMOTE = 'used_emote',
-  PASSPORT_OPENED = 'passport_opened'
+  PASSPORT_OPENED = 'passport_opened',
+  WALKED_DISTANCE = 'walked_distance',
+  VERTICAL_HEIGHT_REACHED = 'vertical_height_reached'
 }
 
 function parseExplorerClientEvent(event: any): Event | undefined {
@@ -70,6 +80,41 @@ function parseExplorerClientEvent(event: any): Event | undefined {
         }
       }
     } as PassportOpenedEvent
+  }
+
+  if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.WALKED_DISTANCE) {
+    return {
+      type: Events.Type.CLIENT,
+      subType: Events.SubType.Client.WALKED_DISTANCE,
+      timestamp: new Date(event.timestamp).getTime(),
+      key: event.messageId,
+      metadata: {
+        authChain: JSON.parse(event.context.auth_chain),
+        userAddress: event.context.dcl_eth_address,
+        sessionId: event.context.session_id,
+        timestamp: event.sentAt,
+        realm: event.context.realm,
+        distance: event.properties.distance,
+        stepCount: event.properties.step_count
+      }
+    } as WalkedDistanceEvent
+  }
+
+  if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.VERTICAL_HEIGHT_REACHED) {
+    return {
+      type: Events.Type.CLIENT,
+      subType: Events.SubType.Client.VERTICAL_HEIGHT_REACHED,
+      timestamp: new Date(event.timestamp).getTime(),
+      key: event.messageId,
+      metadata: {
+        authChain: JSON.parse(event.context.auth_chain),
+        userAddress: event.context.dcl_eth_address,
+        sessionId: event.context.session_id,
+        timestamp: event.sentAt,
+        realm: event.context.realm,
+        height: event.properties.height
+      }
+    } as VerticalHeightReachedEvent
   }
 
   return undefined

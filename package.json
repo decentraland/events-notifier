@@ -19,7 +19,7 @@
     "@aws-sdk/client-sns": "^3.609.0",
     "@dcl/catalyst-contracts": "^4.4.1",
     "@dcl/platform-server-commons": "^0.0.4",
-    "@dcl/schemas": "^13.10.0",
+    "@dcl/schemas": "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/add-events-related-to-badges/dcl-schemas-13.10.1-10939128657.commit-0907a6b.tgz",
     "@well-known-components/env-config-provider": "^1.2.0",
     "@well-known-components/http-server": "^2.1.0",
     "@well-known-components/interfaces": "^1.4.3",
