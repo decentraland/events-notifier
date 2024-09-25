@@ -25,6 +25,7 @@ export type BaseComponents = {
   fetch: IFetchComponent
   producerRegistry: IProducerRegistry
   eventPublisher: IEventPublisher
+  eventParser: IEventParser
 }
 
 // components used in runtime
@@ -87,4 +88,8 @@ export type IProducerRegistry = IBaseComponent & {
 
 export type IEventPublisher = {
   publishMessage(event: Event): Promise<string | undefined>
+}
+
+export type IEventParser = {
+  parseExplorerClientEvent(event: any): Event | undefined
 }

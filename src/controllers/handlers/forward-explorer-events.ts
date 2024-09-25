@@ -1,4 +1,3 @@
-import { parseExplorerClientEvent } from '../../adapters/event-parser'
 import { HandlerContextWithPath } from '../../types'
 import crypto from 'crypto'
 
@@ -21,12 +20,13 @@ function validateIfSegmentIsTheSourceOfTheEvent(
 
 export async function setForwardExplorerEventsHandler(
   context: Pick<
-    HandlerContextWithPath<'eventPublisher' | 'config' | 'logs', '/forward'>,
+    HandlerContextWithPath<'eventPublisher' | 'eventParser' | 'config' | 'logs', '/forward'>,
     'params' | 'request' | 'components'
   >
 ) {
-  const logger = context.components.logs.getLogger('forward-explorer-events')
-  const segmentSignigKey = await context.components.config.requireString('SEGMENT_SIGNING_KEY')
+  const { logs, config, eventParser, eventPublisher } = context.components
+  const logger = logs.getLogger('forward-explorer-events')
+  const segmentSignigKey = await config.requireString('SEGMENT_SIGNING_KEY')
 
   const body = await context.request.json()
   const signatureHeader = context.request.headers.get('x-signature')
@@ -46,12 +46,19 @@ export async function setForwardExplorerEventsHandler(
     }
   }
 
-  const parsedEvent = parseExplorerClientEvent(body)
+  const parsedEvent = eventParser.parseExplorerClientEvent(body)
 
   if (!parsedEvent) {
-    logger.warn('Invalid event', {
-      body: JSON.stringify(body)
-    })
+    if (typeof body === 'object' && body !== null) {
+      logger.warn('Invalid event', {
+        body: JSON.stringify(body)
+      })
+    } else {
+      logger.warn('Invalid event', {
+        body
+      })
+    }
+
     return {
       status: 400,
       body: {
@@ -61,7 +68,7 @@ export async function setForwardExplorerEventsHandler(
     }
   }
 
-  await context.components.eventPublisher.publishMessage(parsedEvent)
+  await eventPublisher.publishMessage(parsedEvent)
 
   logger.info('Event parsed and forwarded', {
     parsedEvent: JSON.stringify(parsedEvent)

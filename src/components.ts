@@ -15,7 +15,7 @@ import { bidAcceptedProducer } from './adapters/producers/bid-accepted'
 import { rentalStartedProducer } from './adapters/producers/rental-started'
 import { rentalEndedProducer } from './adapters/producers/rental-ended'
 import { createProducer } from './adapters/create-producer'
-import { createEventPublisher } from './adapters/event-publisher'
+import { createEventPublisherComponent } from './adapters/event-publisher'
 import { createDatabaseComponent } from './adapters/database'
 import {
   createServerComponent,
@@ -24,6 +24,7 @@ import {
 } from '@well-known-components/http-server'
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
 import { itemPublishedProducer } from './adapters/producers/item-published'
+import { createEventParserComponent } from './adapters/event-parser'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
@@ -85,7 +86,7 @@ export async function initComponents(): Promise<AppComponents> {
   const marketplaceSubGraphUrl = await config.requireString('MARKETPLACE_SUBGRAPH_URL')
   const marketplaceSubGraph = await createSubgraphComponent({ config, logs, metrics, fetch }, marketplaceSubGraphUrl)
 
-  const eventPublisher = await createEventPublisher({ config })
+  const eventPublisher = await createEventPublisherComponent({ config })
 
   // Create the producer registry and add all the producers
   const producerRegistry = await createProducerRegistry({ logs })
@@ -132,6 +133,8 @@ export async function initComponents(): Promise<AppComponents> {
     await createProducer({ logs, database, eventPublisher }, await collectionCreatedProducer({ l2CollectionsSubGraph }))
   )
 
+  const eventParser = createEventParserComponent({ logs })
+
   return {
     config,
     logs,
@@ -141,6 +144,7 @@ export async function initComponents(): Promise<AppComponents> {
     database,
     fetch,
     eventPublisher,
+    eventParser,
     l2CollectionsSubGraph,
     landManagerSubGraph,
     rentalsSubGraph,
