@@ -23,6 +23,7 @@ import {
   instrumentHttpServerWithPromClientRegistry
 } from '@well-known-components/http-server'
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
+import { itemPublishedProducer } from './adapters/producers/item-published'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
@@ -93,6 +94,9 @@ export async function initComponents(): Promise<AppComponents> {
       { logs, database, eventPublisher },
       await itemSoldProducer({ config, l2CollectionsSubGraph: onlySatsumaL2CollectionsSubGraph }) // Temp fix to only listen to satsuma until the Subquid has the fix too
     )
+  )
+  producerRegistry.addProducer(
+    await createProducer({ logs, database, eventPublisher }, await itemPublishedProducer({ l2CollectionsSubGraph }))
   )
   producerRegistry.addProducer(
     await createProducer(
