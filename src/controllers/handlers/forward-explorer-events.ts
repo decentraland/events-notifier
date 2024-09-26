@@ -27,6 +27,8 @@ async function validateAuthChain(authChain: AuthChain, address: EthAddress): Pro
     return { ok: false, message: 'Invalid AuthChain' }
   }
 
+  const ownerAddress = Authenticator.ownerAddress(authChain)
+  console.log({ ownerAddress, expectedAddress: address })
   return Authenticator.validateSignature(address, authChain, null)
 }
 
