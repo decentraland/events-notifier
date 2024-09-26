@@ -1,7 +1,6 @@
-import { Authenticator, ValidationResult } from '@dcl/crypto'
+import { Authenticator } from '@dcl/crypto'
 import { AuthChain, EthAddress } from '@dcl/schemas'
 import crypto from 'crypto'
-import { verify } from '@dcl/platform-crypto-middleware'
 
 import { HandlerContextWithPath } from '../../types'
 import { ClientEvent } from '../../adapters/event-parser'
