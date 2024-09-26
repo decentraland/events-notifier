@@ -1,5 +1,9 @@
-import { HandlerContextWithPath } from '../../types'
+import { Authenticator } from '@dcl/crypto'
+import { AuthChain, EthAddress } from '@dcl/schemas'
 import crypto from 'crypto'
+
+import { HandlerContextWithPath } from '../../types'
+import { ClientEvent } from '../../adapters/event-parser'
 
 function validateIfSegmentIsTheSourceOfTheEvent(
   body: any,
@@ -16,6 +20,15 @@ function validateIfSegmentIsTheSourceOfTheEvent(
     .digest('hex')
 
   return digest === signatureHeader
+}
+
+async function validateAuthChain(authChain: AuthChain, address: EthAddress): Promise<boolean> {
+  if (!Authenticator.isValidAuthChain(authChain)) {
+    return false
+  }
+
+  const ownerAddress = Authenticator.ownerAddress(authChain)
+  return ownerAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
 }
 
 export async function setForwardExplorerEventsHandler(
@@ -63,6 +76,26 @@ export async function setForwardExplorerEventsHandler(
       status: 400,
       body: {
         error: 'Invalid event',
+        ok: false
+      }
+    }
+  }
+
+  const castedClientEvent: ClientEvent = parsedEvent as ClientEvent
+  const authChainValidation = await validateAuthChain(
+    castedClientEvent.metadata.authChain,
+    castedClientEvent.metadata.userAddress
+  )
+
+  if (!authChainValidation) {
+    logger.warn("Event won't be forwarded because of invalid AuthChain", {
+      parsedEvent: JSON.stringify(parsedEvent)
+    })
+
+    return {
+      status: 401,
+      body: {
+        error: 'Invalid AuthChain',
         ok: false
       }
     }

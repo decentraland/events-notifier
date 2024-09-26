@@ -17,10 +17,17 @@ enum ExplorerEventIds {
   VERTICAL_HEIGHT_REACHED = 'vertical_height_reached'
 }
 
+export type ClientEvent =
+  | MoveToParcelEvent
+  | PassportOpenedEvent
+  | UsedEmoteEvent
+  | VerticalHeightReachedEvent
+  | WalkedDistanceEvent
+
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
 
-  function parseExplorerClientEvent(event: any): Event | undefined {
+  function parseExplorerClientEvent(event: any): ClientEvent | undefined {
     try {
       if (!event || !event.event) return undefined
 
