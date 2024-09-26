@@ -1,6 +1,7 @@
 import { Authenticator, ValidationResult } from '@dcl/crypto'
 import { AuthChain, EthAddress } from '@dcl/schemas'
 import crypto from 'crypto'
+import { verify } from '@dcl/platform-crypto-middleware'
 
 import { HandlerContextWithPath } from '../../types'
 import { ClientEvent } from '../../adapters/event-parser'
@@ -22,12 +23,20 @@ function validateIfSegmentIsTheSourceOfTheEvent(
   return digest === signatureHeader
 }
 
-async function validateAuthChain(authChain: AuthChain, address: EthAddress): Promise<boolean> {
+async function validateAuthChain(body: any, authChain: AuthChain, address: EthAddress): Promise<boolean> {
   if (!Authenticator.isValidAuthChain(authChain)) {
     return false
   }
 
+  const result = await Authenticator.validateSignature(body, authChain, null)
+  const secondResult = await Authenticator.validateSignature(JSON.stringify(body), authChain, null)
   const ownerAddress = Authenticator.ownerAddress(authChain)
+  console.log({
+    result: JSON.stringify(result),
+    secondResult: JSON.stringify(secondResult),
+    currentResult: ownerAddress === address
+  })
+
   return ownerAddress === address
 }
 
@@ -83,6 +92,7 @@ export async function setForwardExplorerEventsHandler(
 
   const castedClientEvent: ClientEvent = parsedEvent as ClientEvent
   const authChainValidation = await validateAuthChain(
+    body,
     castedClientEvent.metadata.authChain,
     castedClientEvent.metadata.userAddress
   )
