@@ -22,14 +22,13 @@ function validateIfSegmentIsTheSourceOfTheEvent(
   return digest === signatureHeader
 }
 
-async function validateAuthChain(authChain: AuthChain, address: EthAddress): Promise<ValidationResult> {
+async function validateAuthChain(authChain: AuthChain, address: EthAddress): Promise<boolean> {
   if (!Authenticator.isValidAuthChain(authChain)) {
-    return { ok: false, message: 'Invalid AuthChain' }
+    return false
   }
 
   const ownerAddress = Authenticator.ownerAddress(authChain)
-  console.log({ ownerAddress, expectedAddress: address })
-  return Authenticator.validateSignature(address, authChain, null)
+  return ownerAddress === address
 }
 
 export async function setForwardExplorerEventsHandler(
@@ -88,10 +87,9 @@ export async function setForwardExplorerEventsHandler(
     castedClientEvent.metadata.userAddress
   )
 
-  if (!authChainValidation.ok) {
+  if (!authChainValidation) {
     logger.warn("Event won't be forwarded because of invalid AuthChain", {
-      parsedEvent: JSON.stringify(parsedEvent),
-      authChainValidation: JSON.stringify(authChainValidation)
+      parsedEvent: JSON.stringify(parsedEvent)
     })
 
     return {
