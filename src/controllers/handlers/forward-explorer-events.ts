@@ -23,21 +23,13 @@ function validateIfSegmentIsTheSourceOfTheEvent(
   return digest === signatureHeader
 }
 
-async function validateAuthChain(body: any, authChain: AuthChain, address: EthAddress): Promise<boolean> {
+async function validateAuthChain(authChain: AuthChain, address: EthAddress): Promise<boolean> {
   if (!Authenticator.isValidAuthChain(authChain)) {
     return false
   }
 
-  const result = await Authenticator.validateSignature(body, authChain, null)
-  const secondResult = await Authenticator.validateSignature(JSON.stringify(body), authChain, null)
   const ownerAddress = Authenticator.ownerAddress(authChain)
-  console.log({
-    result: JSON.stringify(result),
-    secondResult: JSON.stringify(secondResult),
-    currentResult: ownerAddress === address
-  })
-
-  return ownerAddress === address
+  return ownerAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
 }
 
 export async function setForwardExplorerEventsHandler(
@@ -92,7 +84,6 @@ export async function setForwardExplorerEventsHandler(
 
   const castedClientEvent: ClientEvent = parsedEvent as ClientEvent
   const authChainValidation = await validateAuthChain(
-    body,
     castedClientEvent.metadata.authChain,
     castedClientEvent.metadata.userAddress
   )
