@@ -1,5 +1,4 @@
 import {
-  Event,
   Events,
   MoveToParcelEvent,
   PassportOpenedEvent,
@@ -27,9 +26,18 @@ export type ClientEvent =
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
 
+  function isAddressCorrectlyConfigured(event: any): boolean {
+    return event.context && event.context.dcl_eth_address && event.context.dcl_eth_address !== 'NOT CONFIGURED'
+  }
+
   function parseExplorerClientEvent(event: any): ClientEvent | undefined {
     try {
       if (!event || !event.event) return undefined
+
+      if (!isAddressCorrectlyConfigured(event)) {
+        logger.warn('Event does not have a user address, discarding', { event })
+        return undefined
+      }
 
       if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.MOVE_TO_PARCEL) {
         return {
