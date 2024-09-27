@@ -41,14 +41,15 @@ describe('item published producer', () => {
         {
           type: 'blockchain',
           subType: 'item-published',
-          key: 'urn:decentraland:matic:collections-v2:0x6105f0f5ef8b28cf81e64551588d13221d4151ad:3',
+          key: '0x6105f0f5ef8b28cf81e64551588d13221d4151ad-3',
           timestamp: 1623259167000,
           metadata: {
             creator: '0x943d99cefa84b247b679d2b7cce17c7c93e6587b',
             category: 'wearable',
             rarity: 'mythic',
             network: 'polygon',
-            tokenId: '0x6105f0f5ef8b28cf81e64551588d13221d4151ad-3'
+            itemId: '0x6105f0f5ef8b28cf81e64551588d13221d4151ad-3',
+            urn: 'urn:decentraland:matic:collections-v2:0x6105f0f5ef8b28cf81e64551588d13221d4151ad:3'
           }
         }
       ],

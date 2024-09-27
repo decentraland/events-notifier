@@ -81,22 +81,24 @@ export async function itemPublishedProducer(
       }
 
       for (const item of result.items) {
+        const itemId = item.id
         const event: ItemPublishedEvent = {
           type: Events.Type.BLOCKCHAIN,
           subType: Events.SubType.Blockchain.ITEM_PUBLISHED,
-          key: item.urn,
+          key: itemId,
           timestamp: item.createdAt * 1000,
           metadata: {
             creator: item.creator,
             category: item.metadata.wearable ? 'wearable' : 'emote',
             rarity: item.rarity,
             network: 'polygon',
-            tokenId: item.id
+            itemId,
+            urn: item.urn
           }
         }
         produced.push(event)
 
-        paginationId = item.id
+        paginationId = itemId
       }
     } while (result.items.length === PAGE_SIZE)
 
