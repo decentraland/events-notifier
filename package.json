@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.609.0",
-    "@dcl/catalyst-contracts": "^4.4.1",
+    "@dcl/catalyst-contracts": "^4.4.2",
     "@dcl/crypto": "^3.4.5",
     "@dcl/platform-server-commons": "^0.0.4",
     "@dcl/schemas": "^14.0.0",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@dcl/eslint-config": "^2.2.1",
     "@types/node": "^20.14.9",
-    "@well-known-components/test-helpers": "^1.5.6",
+    "@well-known-components/test-helpers": "^1.5.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
