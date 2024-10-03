@@ -2,7 +2,9 @@ import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import { AppComponents, IEventPublisher } from '../types'
 import { Event } from '@dcl/schemas'
 
-export async function createEventPublisher({ config }: Pick<AppComponents, 'config'>): Promise<IEventPublisher> {
+export async function createEventPublisherComponent({
+  config
+}: Pick<AppComponents, 'config'>): Promise<IEventPublisher> {
   const snsArn = await config.requireString('AWS_SNS_ARN')
   const optionalEndpoint = await config.getString('AWS_SNS_ENDPOINT')
 

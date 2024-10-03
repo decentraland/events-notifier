@@ -1,0 +1,57 @@
+{
+  "event": {
+    "event": "move_to_parcel",
+    "properties": {
+      "scene_hash": "bafkreiewj4kzcj4waulszgh5q4g6rz42dbcdbeceqop3b6q4ovw4wng7zm",
+      "old_parcel": "(0, 1)",
+      "is_empty_scene": "UNDEFINED",
+      "new_parcel": "(0, 0)"
+    },
+    "context": {
+      "dcl_renderer_type": "Desktop",
+      "renderer_version": "v0.29.0-alpha-main",
+      "parcel": "(0, 0)",
+      "os": "Unix 21.6.0.0",
+      "platform": "Unity",
+      "library": { "version": "2.4.2", "name": "Analytics-CSharp" },
+      "operating_system": "Mac OS X 12.6.0",
+      "launcher_anonymous_id": "1a629c6d-4ff7-4626-8fff-a729405649b9",
+      "auth_chain": [
+        {
+          "type": "SIGNER",
+          "payload": "0xtest7d1f3049f3d3f0f7e1f6b9a5b3f3f0f7e1f6",
+          "signature": ""
+        },
+        {
+          "type": "ECDSA_EPHEMERAL",
+          "payload": "Decentraland Login\nEphemeral address: 0xtestd5b9fb66bdbf185b26ba7234060d3e441189\nExpiration: 2024-10-03T15:44:11.097Z",
+          "signature": "0xtest88838eaa09312a650ef3e4646d73690f39acf61672dfc8df4b9010249cf85f42c14a822cff5334330efdca9745698934365b732c49fcb73ae111b7c227dc1b"
+        }
+      ],
+      "position": "(0.0000, 0.0800, 0.0000)",
+      "runtime": "release",
+      "dcl_eth_address": "0xtest7d1f3049f3d3f0f7e1f6b9a5b3f3f0f7e1f6",
+      "realm": "main",
+      "session_id": "8a3c187b-aa0a-4485-a8d9-e23b26223b53",
+      "ip": "83.51.139.141.test"
+    },
+    "_metadata": {
+      "bundled": [],
+      "unbundled": ["Explorer Metrics Service (Decentraland)", "Webhook"],
+      "bundledIds": []
+    },
+    "receivedAt": "2024-09-26T14:10:27.585Z",
+    "version": 2,
+    "type": "track",
+    "anonymousId": "933ad89e-dbef-4a7c-86bb-1b8ce1578864",
+    "integrations": {},
+    "metrics": null,
+    "userId": null,
+    "channel": "client",
+    "projectId": "6QxyCyHdguh8hStkapKJkD",
+    "originalTimestamp": "2024-09-26T14:10:02.4549580Z",
+    "messageId": "424ef2ea-5046-4078-983d-96ca9cc8c2fe",
+    "timestamp": "2024-09-26T14:10:03.219Z",
+    "sentAt": "2024-09-26T14:10:26.821Z"
+  }
+}

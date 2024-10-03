@@ -15,7 +15,7 @@ import { bidAcceptedProducer } from './adapters/producers/bid-accepted'
 import { rentalStartedProducer } from './adapters/producers/rental-started'
 import { rentalEndedProducer } from './adapters/producers/rental-ended'
 import { createProducer } from './adapters/create-producer'
-import { createEventPublisher } from './adapters/event-publisher'
+import { createEventPublisherComponent } from './adapters/event-publisher'
 import { createDatabaseComponent } from './adapters/database'
 import {
   createServerComponent,
@@ -23,6 +23,8 @@ import {
   instrumentHttpServerWithPromClientRegistry
 } from '@well-known-components/http-server'
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
+import { itemPublishedProducer } from './adapters/producers/item-published'
+import { createEventParserComponent } from './adapters/event-parser'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
@@ -69,6 +71,12 @@ export async function initComponents(): Promise<AppComponents> {
     l2CollectionsSubGraphUrl
   )
 
+  const onlySatsumaL2CollectionsSubGraphUrl = await config.getString('ONLY_SATSUMA_COLLECTIONS_L2_SUBGRAPH_URL')
+  const onlySatsumaL2CollectionsSubGraph = await createSubgraphComponent(
+    { config, logs, metrics, fetch },
+    onlySatsumaL2CollectionsSubGraphUrl || l2CollectionsSubGraphUrl
+  )
+
   const rentalsSubGraphUrl = await config.requireString('RENTALS_SUBGRAPH_URL')
   const rentalsSubGraph = await createSubgraphComponent({ config, logs, metrics, fetch }, rentalsSubGraphUrl)
 
@@ -78,12 +86,18 @@ export async function initComponents(): Promise<AppComponents> {
   const marketplaceSubGraphUrl = await config.requireString('MARKETPLACE_SUBGRAPH_URL')
   const marketplaceSubGraph = await createSubgraphComponent({ config, logs, metrics, fetch }, marketplaceSubGraphUrl)
 
-  const eventPublisher = await createEventPublisher({ config })
+  const eventPublisher = await createEventPublisherComponent({ config })
 
   // Create the producer registry and add all the producers
   const producerRegistry = await createProducerRegistry({ logs })
   producerRegistry.addProducer(
-    await createProducer({ logs, database, eventPublisher }, await itemSoldProducer({ config, l2CollectionsSubGraph }))
+    await createProducer(
+      { logs, database, eventPublisher },
+      await itemSoldProducer({ config, l2CollectionsSubGraph: onlySatsumaL2CollectionsSubGraph }) // Temp fix to only listen to satsuma until the Subquid has the fix too
+    )
+  )
+  producerRegistry.addProducer(
+    await createProducer({ logs, database, eventPublisher }, await itemPublishedProducer({ l2CollectionsSubGraph }))
   )
   producerRegistry.addProducer(
     await createProducer(
@@ -119,6 +133,8 @@ export async function initComponents(): Promise<AppComponents> {
     await createProducer({ logs, database, eventPublisher }, await collectionCreatedProducer({ l2CollectionsSubGraph }))
   )
 
+  const eventParser = createEventParserComponent({ logs })
+
   return {
     config,
     logs,
@@ -128,6 +144,7 @@ export async function initComponents(): Promise<AppComponents> {
     database,
     fetch,
     eventPublisher,
+    eventParser,
     l2CollectionsSubGraph,
     landManagerSubGraph,
     rentalsSubGraph,
