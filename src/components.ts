@@ -71,12 +71,6 @@ export async function initComponents(): Promise<AppComponents> {
     l2CollectionsSubGraphUrl
   )
 
-  const onlySatsumaL2CollectionsSubGraphUrl = await config.getString('ONLY_SATSUMA_COLLECTIONS_L2_SUBGRAPH_URL')
-  const onlySatsumaL2CollectionsSubGraph = await createSubgraphComponent(
-    { config, logs, metrics, fetch },
-    onlySatsumaL2CollectionsSubGraphUrl || l2CollectionsSubGraphUrl
-  )
-
   const rentalsSubGraphUrl = await config.requireString('RENTALS_SUBGRAPH_URL')
   const rentalsSubGraph = await createSubgraphComponent({ config, logs, metrics, fetch }, rentalsSubGraphUrl)
 
@@ -91,10 +85,7 @@ export async function initComponents(): Promise<AppComponents> {
   // Create the producer registry and add all the producers
   const producerRegistry = await createProducerRegistry({ logs })
   producerRegistry.addProducer(
-    await createProducer(
-      { logs, database, eventPublisher },
-      await itemSoldProducer({ config, l2CollectionsSubGraph: onlySatsumaL2CollectionsSubGraph }) // Temp fix to only listen to satsuma until the Subquid has the fix too
-    )
+    await createProducer({ logs, database, eventPublisher }, await itemSoldProducer({ config, l2CollectionsSubGraph }))
   )
   producerRegistry.addProducer(
     await createProducer({ logs, database, eventPublisher }, await itemPublishedProducer({ l2CollectionsSubGraph }))
