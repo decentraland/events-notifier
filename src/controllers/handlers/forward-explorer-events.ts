@@ -107,12 +107,9 @@ export async function setForwardExplorerEventsHandler(
     parsedEvent: JSON.stringify(parsedEvent)
   })
 
-  // if the receivedAt is greater than the reportedAt, exclude metric report
   if (
-    !(
-      (parsedEvent as ClientEvent).metadata.timestamps.receivedAt <
-      (parsedEvent as ClientEvent).metadata.timestamps.reportedAt
-    )
+    (parsedEvent as ClientEvent).metadata.timestamps.reportedAt <
+    (parsedEvent as ClientEvent).metadata.timestamps.receivedAt
   ) {
     const eventDelayBetweenExplorerAndSegment =
       (castedClientEvent.metadata.timestamps.receivedAt - castedClientEvent.metadata.timestamps.reportedAt) / 1000
