@@ -119,6 +119,35 @@ export async function setForwardExplorerEventsHandler(
     timestampFriendly: new Date(castedClientEvent.timestamp).toISOString()
   })
 
+  logger.info('Calculations', {
+    eventDelayBetweenExplorerAndSegment,
+    eventDelayBetweenSegmentAndWebhook
+  })
+
+  // if any calculation is negative, print raw event
+  if (eventDelayBetweenExplorerAndSegment < 0) {
+    logger.info('Raw event', {
+      event: JSON.stringify(parsedEvent),
+      rawEvent: JSON.stringify(body)
+    })
+  }
+
+  if (eventDelayBetweenSegmentAndWebhook < 0) {
+    logger.info('Raw event', {
+      event: JSON.stringify(parsedEvent),
+      rawEvent: JSON.stringify(body)
+    })
+  }
+
+  // {
+  //   receivedAt: 1741795194189,
+  //   receivedAtFriendly: '2025-03-12T15:59:54.189Z',
+  //   reportedAt: 1741795141826,
+  //   reportedAtFriendly: '2025-03-12T15:59:01.826Z',
+  //   timestamp: 1741795141826,
+  //   timestampFriendly: '2025-03-12T15:59:01.826Z'
+  // }
+
   metrics.increment('handled_explorer_events_count', {
     event_type: parsedEvent.type
   })
