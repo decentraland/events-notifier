@@ -108,6 +108,17 @@ export async function setForwardExplorerEventsHandler(
     castedClientEvent.metadata.timestamps.receivedAt - castedClientEvent.metadata.timestamps.reportedAt
   const eventDelayBetweenSegmentAndWebhook =
     castedClientEvent.timestamp - castedClientEvent.metadata.timestamps.receivedAt
+
+  // log all used timestamps in friendly format
+  logger.info('Timestamps', {
+    receivedAt: castedClientEvent.metadata.timestamps.receivedAt,
+    receivedAtFriendly: new Date(castedClientEvent.metadata.timestamps.receivedAt).toISOString(),
+    reportedAt: castedClientEvent.metadata.timestamps.reportedAt,
+    reportedAtFriendly: new Date(castedClientEvent.metadata.timestamps.reportedAt).toISOString(),
+    timestamp: castedClientEvent.timestamp,
+    timestampFriendly: new Date(castedClientEvent.timestamp).toISOString()
+  })
+
   metrics.increment('handled_explorer_events_count', {
     event_type: parsedEvent.type
   })
