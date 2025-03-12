@@ -149,19 +149,19 @@ export async function setForwardExplorerEventsHandler(
   // }
 
   metrics.increment('handled_explorer_events_count', {
-    event_type: parsedEvent.type
+    event_type: parsedEvent.subType
   })
   metrics.increment(
     'explorer_segment_event_delay_in_seconds_total',
     {
-      event_type: parsedEvent.type
+      event_type: parsedEvent.subType
     },
     eventDelayBetweenExplorerAndSegment
   )
   metrics.increment(
     'segment_webhook_event_delay_in_seconds_total',
     {
-      event_type: parsedEvent.type
+      event_type: parsedEvent.subType
     },
     eventDelayBetweenSegmentAndWebhook
   )
