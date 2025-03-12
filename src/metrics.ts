@@ -11,12 +11,12 @@ export const metricDeclarations = {
   ...pgMetricDeclarations,
   ...theGraphMetricDeclarations,
   explorer_segment_event_delay_in_seconds: {
-    type: IMetricsComponent.GaugeType,
+    type: IMetricsComponent.CounterType,
     help: 'Delay between segment event and explorer event',
     labelNames: ['event_type']
   },
   segment_webhook_event_delay_in_seconds: {
-    type: IMetricsComponent.GaugeType,
+    type: IMetricsComponent.CounterType,
     help: 'Delay between segment webhook event and explorer event',
     labelNames: ['event_type']
   },
