@@ -103,72 +103,40 @@ export async function setForwardExplorerEventsHandler(
 
   await eventPublisher.publishMessage(parsedEvent)
 
-  // metrics report
-  const eventDelayBetweenExplorerAndSegment =
-    (castedClientEvent.metadata.timestamps.receivedAt - castedClientEvent.metadata.timestamps.reportedAt) / 1000
-  const eventDelayBetweenSegmentAndWebhook =
-    (castedClientEvent.timestamp - castedClientEvent.metadata.timestamps.receivedAt) / 1000
-
-  // log all used timestamps in friendly format
-  logger.info('Timestamps', {
-    receivedAt: castedClientEvent.metadata.timestamps.receivedAt,
-    receivedAtFriendly: new Date(castedClientEvent.metadata.timestamps.receivedAt).toISOString(),
-    reportedAt: castedClientEvent.metadata.timestamps.reportedAt,
-    reportedAtFriendly: new Date(castedClientEvent.metadata.timestamps.reportedAt).toISOString(),
-    timestamp: castedClientEvent.timestamp,
-    timestampFriendly: new Date(castedClientEvent.timestamp).toISOString()
-  })
-
-  logger.info('Calculations', {
-    eventDelayBetweenExplorerAndSegment,
-    eventDelayBetweenSegmentAndWebhook
-  })
-
-  // if any calculation is negative, print raw event
-  if (eventDelayBetweenExplorerAndSegment < 0) {
-    logger.info('Raw event', {
-      event: JSON.stringify(parsedEvent),
-      rawEvent: JSON.stringify(body)
-    })
-  }
-
-  if (eventDelayBetweenSegmentAndWebhook < 0) {
-    logger.info('Raw event', {
-      event: JSON.stringify(parsedEvent),
-      rawEvent: JSON.stringify(body)
-    })
-  }
-
-  // {
-  //   receivedAt: 1741795194189,
-  //   receivedAtFriendly: '2025-03-12T15:59:54.189Z',
-  //   reportedAt: 1741795141826,
-  //   reportedAtFriendly: '2025-03-12T15:59:01.826Z',
-  //   timestamp: 1741795141826,
-  //   timestampFriendly: '2025-03-12T15:59:01.826Z'
-  // }
-
-  metrics.increment('handled_explorer_events_count', {
-    event_type: parsedEvent.subType
-  })
-  metrics.increment(
-    'explorer_segment_event_delay_in_seconds_total',
-    {
-      event_type: parsedEvent.subType
-    },
-    eventDelayBetweenExplorerAndSegment
-  )
-  metrics.increment(
-    'segment_webhook_event_delay_in_seconds_total',
-    {
-      event_type: parsedEvent.subType
-    },
-    eventDelayBetweenSegmentAndWebhook
-  )
-
   logger.info('Event parsed and forwarded', {
     parsedEvent: JSON.stringify(parsedEvent)
   })
+
+  // if the receivedAt is greater than the reportedAt, exclude metric report
+  if (
+    !(
+      (parsedEvent as ClientEvent).metadata.timestamps.receivedAt <
+      (parsedEvent as ClientEvent).metadata.timestamps.reportedAt
+    )
+  ) {
+    const eventDelayBetweenExplorerAndSegment =
+      (castedClientEvent.metadata.timestamps.receivedAt - castedClientEvent.metadata.timestamps.reportedAt) / 1000
+    const eventDelayBetweenSegmentAndWebhook =
+      (castedClientEvent.timestamp - castedClientEvent.metadata.timestamps.receivedAt) / 1000
+
+    metrics.increment('handled_explorer_events_count', {
+      event_type: parsedEvent.subType
+    })
+    metrics.increment(
+      'explorer_segment_event_delay_in_seconds_total',
+      {
+        event_type: parsedEvent.subType
+      },
+      eventDelayBetweenExplorerAndSegment
+    )
+    metrics.increment(
+      'segment_webhook_event_delay_in_seconds_total',
+      {
+        event_type: parsedEvent.subType
+      },
+      eventDelayBetweenSegmentAndWebhook
+    )
+  }
 
   return {
     status: 200,
