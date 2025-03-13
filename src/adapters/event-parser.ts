@@ -43,13 +43,17 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         return {
           type: Events.Type.CLIENT,
           subType: Events.SubType.Client.MOVE_TO_PARCEL,
-          timestamp: new Date(event.timestamp).getTime(),
+          timestamp: Date.now(),
           key: event.messageId,
           metadata: {
             authChain: JSON.parse(event.context.auth_chain),
             userAddress: event.context.dcl_eth_address,
             sessionId: event.context.session_id,
             timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
             realm: event.context.realm,
             parcel: {
               isEmptyParcel: event.properties.is_empty_parcel,
@@ -65,13 +69,17 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         return {
           type: Events.Type.CLIENT,
           subType: Events.SubType.Client.USED_EMOTE,
-          timestamp: new Date(event.timestamp).getTime(),
+          timestamp: Date.now(),
           key: event.messageId,
           metadata: {
             authChain: JSON.parse(event.context.auth_chain),
             userAddress: event.context.dcl_eth_address,
             sessionId: event.context.session_id,
             timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
             realm: event.context.realm,
             emote: {
               emoteIndex: event.properties.emote_index,
@@ -87,13 +95,17 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         return {
           type: Events.Type.CLIENT,
           subType: Events.SubType.Client.PASSPORT_OPENED,
-          timestamp: new Date(event.timestamp).getTime(),
+          timestamp: Date.now(),
           key: event.messageId,
           metadata: {
             authChain: JSON.parse(event.context.auth_chain),
             userAddress: event.context.dcl_eth_address,
             sessionId: event.context.session_id,
             timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
             realm: event.context.realm,
             passport: {
               receiver: event.properties.receiver_id
@@ -106,13 +118,17 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         return {
           type: Events.Type.CLIENT,
           subType: Events.SubType.Client.WALKED_DISTANCE,
-          timestamp: new Date(event.timestamp).getTime(),
+          timestamp: Date.now(),
           key: event.messageId,
           metadata: {
             authChain: JSON.parse(event.context.auth_chain),
             userAddress: event.context.dcl_eth_address,
             sessionId: event.context.session_id,
             timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
             realm: event.context.realm,
             distance: event.properties.distance,
             stepCount: event.properties.step_count
@@ -124,13 +140,17 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         return {
           type: Events.Type.CLIENT,
           subType: Events.SubType.Client.VERTICAL_HEIGHT_REACHED,
-          timestamp: new Date(event.timestamp).getTime(),
+          timestamp: Date.now(),
           key: event.messageId,
           metadata: {
             authChain: JSON.parse(event.context.auth_chain),
             userAddress: event.context.dcl_eth_address,
             sessionId: event.context.session_id,
             timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
             realm: event.context.realm,
             height: event.properties.height
           }

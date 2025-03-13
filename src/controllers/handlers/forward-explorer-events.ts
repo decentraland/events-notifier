@@ -33,11 +33,11 @@ async function validateAuthChain(authChain: AuthChain, address: EthAddress): Pro
 
 export async function setForwardExplorerEventsHandler(
   context: Pick<
-    HandlerContextWithPath<'eventPublisher' | 'eventParser' | 'config' | 'logs', '/forward'>,
+    HandlerContextWithPath<'eventPublisher' | 'eventParser' | 'config' | 'logs' | 'metrics', '/forward'>,
     'params' | 'request' | 'components'
   >
 ) {
-  const { logs, config, eventParser, eventPublisher } = context.components
+  const { logs, config, eventParser, eventPublisher, metrics } = context.components
   const logger = logs.getLogger('forward-explorer-events')
   const segmentSignigKey = await config.requireString('SEGMENT_SIGNING_KEY')
 
@@ -106,6 +106,34 @@ export async function setForwardExplorerEventsHandler(
   logger.info('Event parsed and forwarded', {
     parsedEvent: JSON.stringify(parsedEvent)
   })
+
+  if (
+    (parsedEvent as ClientEvent).metadata.timestamps.reportedAt <
+    (parsedEvent as ClientEvent).metadata.timestamps.receivedAt
+  ) {
+    const eventDelayBetweenExplorerAndSegment =
+      (castedClientEvent.metadata.timestamps.receivedAt - castedClientEvent.metadata.timestamps.reportedAt) / 1000
+    const eventDelayBetweenSegmentAndWebhook =
+      (castedClientEvent.timestamp - castedClientEvent.metadata.timestamps.receivedAt) / 1000
+
+    metrics.increment('handled_explorer_events_count', {
+      event_type: parsedEvent.subType
+    })
+    metrics.increment(
+      'explorer_segment_event_delay_in_seconds_total',
+      {
+        event_type: parsedEvent.subType
+      },
+      eventDelayBetweenExplorerAndSegment
+    )
+    metrics.increment(
+      'segment_webhook_event_delay_in_seconds_total',
+      {
+        event_type: parsedEvent.subType
+      },
+      eventDelayBetweenSegmentAndWebhook
+    )
+  }
 
   return {
     status: 200,

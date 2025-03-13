@@ -2,10 +2,6 @@
   "name": "blockchain-event-notifier",
   "license": "Apache-2.0",
   "private": true,
-  "engines": {
-    "node": "18.* || 20.*",
-    "npm": "8.* || 9.*"
-  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node --trace-warnings --abort-on-uncaught-exception --unhandled-rejections=strict dist/index.js",
@@ -20,7 +16,7 @@
     "@dcl/catalyst-contracts": "^4.4.2",
     "@dcl/crypto": "^3.4.5",
     "@dcl/platform-server-commons": "^0.0.4",
-    "@dcl/schemas": "^14.0.0",
+    "@dcl/schemas": "^16.1.0",
     "@well-known-components/env-config-provider": "^1.2.0",
     "@well-known-components/http-server": "^2.1.0",
     "@well-known-components/interfaces": "^1.4.3",
