@@ -16,6 +16,7 @@ import { rentalStartedProducer } from './adapters/producers/rental-started'
 import { rentalEndedProducer } from './adapters/producers/rental-ended'
 import { createProducer } from './adapters/create-producer'
 import { createEventPublisherComponent } from './adapters/event-publisher'
+import { createSegmentPublisherComponent } from './adapters/segment-publisher'
 import { createDatabaseComponent } from './adapters/database'
 import {
   createServerComponent,
@@ -81,6 +82,7 @@ export async function initComponents(): Promise<AppComponents> {
   const marketplaceSubGraph = await createSubgraphComponent({ config, logs, metrics, fetch }, marketplaceSubGraphUrl)
 
   const eventPublisher = await createEventPublisherComponent({ config })
+  const segmentPublisher = await createSegmentPublisherComponent({ config, logs, fetch })
 
   // Create the producer registry and add all the producers
   const producerRegistry = await createProducerRegistry({ logs })
@@ -140,6 +142,7 @@ export async function initComponents(): Promise<AppComponents> {
     landManagerSubGraph,
     rentalsSubGraph,
     marketplaceSubGraph,
-    producerRegistry
+    producerRegistry,
+    segmentPublisher
   }
 }

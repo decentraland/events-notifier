@@ -33,6 +33,9 @@ async function initComponents(): Promise<TestComponents> {
     ...components,
     config,
     metrics: createTestMetricsComponent(metricDeclarations),
-    localFetch: await createLocalFetchCompoment(config)
+    localFetch: await createLocalFetchCompoment(config),
+    segmentPublisher: {
+      publishToSegment: jest.fn().mockResolvedValue(true)
+    }
   }
 }

@@ -26,6 +26,7 @@ export type BaseComponents = {
   producerRegistry: IProducerRegistry
   eventPublisher: IEventPublisher
   eventParser: IEventParser
+  segmentPublisher: ISegmentPublisher
 }
 
 // components used in runtime
@@ -92,4 +93,8 @@ export type IEventPublisher = {
 
 export type IEventParser = {
   parseExplorerClientEvent(event: any): Event | undefined
+}
+
+export type ISegmentPublisher = {
+  publishToSegment(event: Event): Promise<boolean>
 }

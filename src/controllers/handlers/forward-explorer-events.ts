@@ -33,27 +33,39 @@ async function validateAuthChain(authChain: AuthChain, address: EthAddress): Pro
 
 export async function setForwardExplorerEventsHandler(
   context: Pick<
-    HandlerContextWithPath<'eventPublisher' | 'eventParser' | 'config' | 'logs' | 'metrics', '/forward'>,
+    HandlerContextWithPath<
+      'eventPublisher' | 'eventParser' | 'config' | 'logs' | 'metrics' | 'segmentPublisher',
+      '/forward'
+    >,
     'params' | 'request' | 'components'
   >
 ) {
-  const { logs, config, eventParser, eventPublisher, metrics } = context.components
+  const { logs, config, eventParser, eventPublisher, metrics, segmentPublisher } = context.components
   const logger = logs.getLogger('forward-explorer-events')
-  const segmentSignigKey = await config.requireString('SEGMENT_SIGNING_KEY')
+  const segmentSigningKey = await config.requireString('SEGMENT_SIGNING_KEY')
+  const explorerClientKey = await config.requireString('EXPLORER_CLIENT_KEY')
 
   const body = await context.request.json()
   const signatureHeader = context.request.headers.get('x-signature')
-  const result = validateIfSegmentIsTheSourceOfTheEvent(body, signatureHeader, segmentSignigKey)
+  const explorerHeader = context.request.headers.get('x-explorer-client')
 
-  if (!result) {
-    logger.warn('Invalid signature', {
+  // Check if this is a direct request from Explorer
+  const isExplorerClient = explorerHeader === explorerClientKey
+
+  // Check if this is a Segment-signed request
+  const isSegmentRequest = validateIfSegmentIsTheSourceOfTheEvent(body, signatureHeader, segmentSigningKey)
+
+  // If neither Explorer nor Segment, reject the request
+  if (!isSegmentRequest && !isExplorerClient) {
+    logger.warn('Invalid signature or client', {
       signatureHeader: signatureHeader ? signatureHeader : 'empty-signature',
+      explorerHeader: explorerHeader ? 'present' : 'missing',
       body: JSON.stringify(body)
     })
     return {
       status: 401,
       body: {
-        error: 'Invalid signature',
+        error: 'Invalid signature or client',
         ok: false
       }
     }
@@ -101,9 +113,26 @@ export async function setForwardExplorerEventsHandler(
     }
   }
 
-  await eventPublisher.publishMessage(parsedEvent)
+  // Prepare publish promises
+  const publishPromises = []
+
+  // Always publish to SNS
+  publishPromises.push(eventPublisher.publishMessage(parsedEvent))
+
+  // If from Explorer, also send to Segment (in parallel)
+  if (isExplorerClient) {
+    logger.info('Received direct event from Explorer, forwarding to Segment', {
+      eventType: parsedEvent.type,
+      eventSubType: parsedEvent.subType
+    })
+
+    publishPromises.push(segmentPublisher.publishToSegment(parsedEvent))
+  }
+
+  await Promise.all(publishPromises)
 
   logger.info('Event parsed and forwarded', {
+    source: isExplorerClient ? 'Explorer' : 'Segment',
     parsedEvent: JSON.stringify(parsedEvent)
   })
 
@@ -117,7 +146,8 @@ export async function setForwardExplorerEventsHandler(
       (castedClientEvent.timestamp - castedClientEvent.metadata.timestamps.receivedAt) / 1000
 
     metrics.increment('handled_explorer_events_count', {
-      event_type: parsedEvent.subType
+      event_type: parsedEvent.subType,
+      source: isExplorerClient ? 'explorer' : 'segment'
     })
     metrics.increment(
       'explorer_segment_event_delay_in_seconds_total',
