@@ -1,5 +1,6 @@
 import {
   Events,
+  LoggedInCachedEvent,
   LoggedInEvent,
   MoveToParcelEvent,
   PassportOpenedEvent,
@@ -15,7 +16,8 @@ enum ExplorerEventIds {
   PASSPORT_OPENED = 'passport_opened',
   WALKED_DISTANCE = 'walked_distance',
   VERTICAL_HEIGHT_REACHED = 'vertical_height_reached',
-  LOGGED_IN = 'logged_in'
+  LOGGED_IN = 'logged_in',
+  LOGGED_IN_CACHED = 'logged_in_cached'
 }
 
 export type ClientEvent =
@@ -25,6 +27,7 @@ export type ClientEvent =
   | VerticalHeightReachedEvent
   | WalkedDistanceEvent
   | LoggedInEvent
+  | LoggedInCachedEvent
 
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
@@ -160,10 +163,13 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         } as VerticalHeightReachedEvent
       }
 
-      if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.LOGGED_IN) {
+      if ([ExplorerEventIds.LOGGED_IN, ExplorerEventIds.LOGGED_IN_CACHED].includes(event.event as ExplorerEventIds)) {
         return {
           type: Events.Type.CLIENT,
-          subType: Events.SubType.Client.LOGGED_IN,
+          subType:
+            (event.event as string).toLocaleLowerCase() === ExplorerEventIds.LOGGED_IN_CACHED
+              ? Events.SubType.Client.LOGGED_IN_CACHED
+              : Events.SubType.Client.LOGGED_IN,
           timestamp: Date.now(),
           key: event.messageId,
           metadata: {
