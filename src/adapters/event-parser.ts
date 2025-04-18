@@ -1,5 +1,6 @@
 import {
   Events,
+  LoggedInCachedEvent,
   LoggedInEvent,
   MoveToParcelEvent,
   PassportOpenedEvent,
@@ -26,6 +27,7 @@ export type ClientEvent =
   | VerticalHeightReachedEvent
   | WalkedDistanceEvent
   | LoggedInEvent
+  | LoggedInCachedEvent
 
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
