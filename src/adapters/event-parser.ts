@@ -1,5 +1,6 @@
 import {
   Events,
+  LoggedInEvent,
   MoveToParcelEvent,
   PassportOpenedEvent,
   UsedEmoteEvent,
@@ -13,7 +14,8 @@ enum ExplorerEventIds {
   USED_EMOTE = 'used_emote',
   PASSPORT_OPENED = 'passport_opened',
   WALKED_DISTANCE = 'walked_distance',
-  VERTICAL_HEIGHT_REACHED = 'vertical_height_reached'
+  VERTICAL_HEIGHT_REACHED = 'vertical_height_reached',
+  LOGGED_IN = 'logged_in'
 }
 
 export type ClientEvent =
@@ -22,6 +24,7 @@ export type ClientEvent =
   | UsedEmoteEvent
   | VerticalHeightReachedEvent
   | WalkedDistanceEvent
+  | LoggedInEvent
 
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
@@ -155,6 +158,26 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
             height: event.properties.height
           }
         } as VerticalHeightReachedEvent
+      }
+
+      if ((event.event as string).toLocaleLowerCase() === ExplorerEventIds.LOGGED_IN) {
+        return {
+          type: Events.Type.CLIENT,
+          subType: Events.SubType.Client.LOGGED_IN,
+          timestamp: Date.now(),
+          key: event.messageId,
+          metadata: {
+            authChain: JSON.parse(event.context.auth_chain),
+            userAddress: event.context.dcl_eth_address,
+            sessionId: event.context.session_id,
+            timestamp: event.sentAt,
+            timestamps: {
+              receivedAt: new Date(event.receivedAt).getTime(),
+              reportedAt: new Date(event.timestamp).getTime()
+            },
+            realm: event.context.realm
+          }
+        } as LoggedInEvent
       }
 
       return undefined
