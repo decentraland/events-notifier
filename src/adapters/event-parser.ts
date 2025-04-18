@@ -163,7 +163,11 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
         } as VerticalHeightReachedEvent
       }
 
-      if ([ExplorerEventIds.LOGGED_IN, ExplorerEventIds.LOGGED_IN_CACHED].includes(event.event as ExplorerEventIds)) {
+      if (
+        [ExplorerEventIds.LOGGED_IN, ExplorerEventIds.LOGGED_IN_CACHED].includes(
+          event.event.toLowerCase() as ExplorerEventIds
+        )
+      ) {
         return {
           type: Events.Type.CLIENT,
           subType:
