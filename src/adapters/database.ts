@@ -34,11 +34,13 @@ export function createDatabaseComponent({ pg }: Pick<DatabaseComponents, 'pg'>):
   }
 
   async function upsertWalkedParcelsEvent(data: { address: EthAddress }): Promise<number> {
+    const lastParcel = '0,0'
     const query = SQL`
-      INSERT INTO walked_parcels (address, amount_of_parcels_visited, timestamp)
-      VALUES (${data.address}, 1)
+      INSERT INTO walked_parcels (address, amount_of_parcels_visited, last_parcel)
+      VALUES (${data.address}, 1, ${lastParcel})
       ON CONFLICT (address) DO UPDATE 
-      SET amount_of_parcels_visited = walked_parcels.amount_of_parcels_visited + 1
+      SET amount_of_parcels_visited = walked_parcels.amount_of_parcels_visited + 1,
+          last_parcel = ${lastParcel}
       RETURNING amount_of_parcels_visited
     `
     const result = await pg.query(query)

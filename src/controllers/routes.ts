@@ -3,9 +3,13 @@ import { bearerTokenMiddleware, errorHandler } from '@dcl/platform-server-common
 import { GlobalContext } from '../types'
 import { setCursorHandler } from './handlers/set-cursor'
 import { setForwardExplorerEventsHandler } from './handlers/forward-explorer-events'
+import { setupWebSocketEventsHandler } from './handlers/websocket-events'
 
 // We return the entire router because it will be easier to test than a whole server
-export async function setupRouter({ components }: GlobalContext): Promise<Router<GlobalContext>> {
+export async function setupRouter({ components }: GlobalContext): Promise<{
+  router: Router<GlobalContext>
+  setupWebSocketHandler: () => any
+}> {
   const router = new Router<GlobalContext>()
 
   const { config } = components
@@ -17,7 +21,20 @@ export async function setupRouter({ components }: GlobalContext): Promise<Router
 
   router.post('/forward', setForwardExplorerEventsHandler)
 
+  // Setup the WebSocket handler
+  const setupWebSocketHandler = () =>
+    setupWebSocketEventsHandler({
+      components: {
+        logs: components.logs,
+        eventParser: components.eventParser,
+        eventPublisher: components.eventPublisher,
+        metrics: components.metrics,
+        uwsServer: components.uwsServer,
+        moveToParcelHandler: components.moveToParcelHandler
+      }
+    })
+
   router.use(errorHandler)
 
-  return router
+  return { router, setupWebSocketHandler }
 }

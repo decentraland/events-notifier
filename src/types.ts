@@ -1,3 +1,4 @@
+import { IPgComponent } from '@well-known-components/pg-component'
 import type {
   IBaseComponent,
   IConfigComponent,
@@ -7,6 +8,7 @@ import type {
   IMetricsComponent
 } from '@well-known-components/interfaces'
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
+import { IUWsComponent } from '@well-known-components/uws-http-server'
 
 import { metricDeclarations } from './metrics'
 import { EthAddress, Event, Events } from '@dcl/schemas'
@@ -17,15 +19,18 @@ export type GlobalContext = {
 
 // components used in every environment
 export type BaseComponents = {
+  pg: IPgComponent
   config: IConfigComponent
   logs: ILoggerComponent
   server: IHttpServerComponent<GlobalContext>
+  uwsServer: IUWsComponent
   statusChecks: IBaseComponent
   metrics: IMetricsComponent<keyof typeof metricDeclarations>
   fetch: IFetchComponent
   producerRegistry: IProducerRegistry
   eventPublisher: IEventPublisher
   eventParser: IEventParser
+  moveToParcelHandler: MoveToParcelHandler
 }
 
 // components used in runtime
@@ -35,7 +40,6 @@ export type AppComponents = BaseComponents & {
   landManagerSubGraph: ISubgraphComponent
   marketplaceSubGraph: ISubgraphComponent
   rentalsSubGraph: ISubgraphComponent
-  moveToParcelHandler: MoveToParcelHandler
 }
 // components used in tests
 export type TestComponents = BaseComponents & {
