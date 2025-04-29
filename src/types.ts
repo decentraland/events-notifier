@@ -9,7 +9,7 @@ import type {
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 
 import { metricDeclarations } from './metrics'
-import { EthAddress, Event, Events, Parcel } from '@dcl/schemas'
+import { EthAddress, Event, Events } from '@dcl/schemas'
 
 export type GlobalContext = {
   components: BaseComponents
@@ -57,6 +57,7 @@ export type HandlerContextWithPath<
 export type DatabaseComponent = {
   fetchLastUpdateForEventType(eventSubType: string): Promise<number>
   updateLastUpdateForEventType(eventSubType: string, timestamp: number): Promise<void>
+  upsertWalkedParcelsEvent(data: { address: EthAddress }): Promise<number>
 }
 
 export type IEventProducerResult = {
@@ -96,5 +97,5 @@ export type IEventParser = {
 }
 
 export type MoveToParcelHandler = {
-  processMoveToParcel(address: EthAddress, parcelVisited: Parcel): Promise<void>
+  processMoveToParcel(address: EthAddress, parcelVisited: string): Promise<void>
 }

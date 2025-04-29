@@ -127,7 +127,7 @@ export async function initComponents(): Promise<AppComponents> {
 
   const eventParser = createEventParserComponent({ logs })
 
-  const moveToParcelHandler = createMoveToParcelHandlerComponent({ logs, eventParser, eventPublisher, database })
+  const moveToParcelHandler = createMoveToParcelHandlerComponent({ logs, eventPublisher, database })
 
   return {
     config,

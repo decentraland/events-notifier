@@ -1,6 +1,7 @@
 import SQL from 'sql-template-strings'
 import { IPgComponent } from '@well-known-components/pg-component'
 import { DatabaseComponent } from '../types'
+import { EthAddress } from '@dcl/schemas'
 
 export type DatabaseComponents = {
   pg: IPgComponent
@@ -32,8 +33,21 @@ export function createDatabaseComponent({ pg }: Pick<DatabaseComponents, 'pg'>):
     await pg.query<any>(query)
   }
 
+  async function upsertWalkedParcelsEvent(data: { address: EthAddress }): Promise<number> {
+    const query = SQL`
+      INSERT INTO walked_parcels (address, amount_of_parcels_visited, timestamp)
+      VALUES (${data.address}, 1)
+      ON CONFLICT (address) DO UPDATE 
+      SET amount_of_parcels_visited = walked_parcels.amount_of_parcels_visited + 1
+      RETURNING amount_of_parcels_visited
+    `
+    const result = await pg.query(query)
+    return result.rows[0].amount_of_parcels_visited
+  }
+
   return {
     fetchLastUpdateForEventType,
-    updateLastUpdateForEventType
+    updateLastUpdateForEventType,
+    upsertWalkedParcelsEvent
   }
 }
