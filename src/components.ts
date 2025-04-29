@@ -25,6 +25,7 @@ import {
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
 import { itemPublishedProducer } from './adapters/producers/item-published'
 import { createEventParserComponent } from './adapters/event-parser'
+import { createMoveToParcelHandlerComponent } from './logic/move-to-parcel-handler'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
@@ -126,6 +127,8 @@ export async function initComponents(): Promise<AppComponents> {
 
   const eventParser = createEventParserComponent({ logs })
 
+  const moveToParcelHandler = createMoveToParcelHandlerComponent({ logs, eventParser, eventPublisher, database })
+
   return {
     config,
     logs,
@@ -140,6 +143,7 @@ export async function initComponents(): Promise<AppComponents> {
     landManagerSubGraph,
     rentalsSubGraph,
     marketplaceSubGraph,
-    producerRegistry
+    producerRegistry,
+    moveToParcelHandler
   }
 }

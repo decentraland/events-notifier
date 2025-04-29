@@ -9,7 +9,7 @@ import type {
 import { ISubgraphComponent } from '@well-known-components/thegraph-component'
 
 import { metricDeclarations } from './metrics'
-import { Event, Events } from '@dcl/schemas'
+import { EthAddress, Event, Events, Parcel } from '@dcl/schemas'
 
 export type GlobalContext = {
   components: BaseComponents
@@ -35,6 +35,7 @@ export type AppComponents = BaseComponents & {
   landManagerSubGraph: ISubgraphComponent
   marketplaceSubGraph: ISubgraphComponent
   rentalsSubGraph: ISubgraphComponent
+  moveToParcelHandler: MoveToParcelHandler
 }
 // components used in tests
 export type TestComponents = BaseComponents & {
@@ -92,4 +93,8 @@ export type IEventPublisher = {
 
 export type IEventParser = {
   parseExplorerClientEvent(event: any): Event | undefined
+}
+
+export type MoveToParcelHandler = {
+  processMoveToParcel(address: EthAddress, parcelVisited: Parcel): Promise<void>
 }
