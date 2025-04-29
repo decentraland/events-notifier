@@ -9,8 +9,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     amount_of_parcels_visited: { type: 'integer', notNull: true },
     last_parcel: { type: 'varchar(255)', notNull: true }
   })
+
+  // index for address
+  pgm.createIndex('walked_parcels', 'address')
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
+  pgm.dropIndex('walked_parcels', 'address')
   pgm.dropTable('walked_parcels')
 }

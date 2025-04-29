@@ -10,19 +10,20 @@ export function createMoveToParcelHandlerComponent(
   const logger = logs.getLogger('poc')
 
   async function processMoveToParcel(address: EthAddress, parcelVisited: string) {
-    logger.debug('Processing move to parcel', { address, parcelVisited: parcelVisited.toString() })
+    const parsedAddress = address.toLocaleLowerCase()
+    logger.debug('Processing move to parcel', { address: parsedAddress, parcelVisited: parcelVisited.toString() })
 
-    const amountOfParcelsVisited = await database.upsertWalkedParcelsEvent({ address })
-    logger.debug('Amount of parcels visited', { address, amountOfParcelsVisited })
+    const amountOfParcelsVisited = await database.upsertWalkedParcelsEvent({ address: parsedAddress })
+    logger.debug('Amount of parcels visited', { address: parsedAddress, amountOfParcelsVisited })
 
     if (THRESHOLDS.includes(amountOfParcelsVisited)) {
       await eventPublisher.publishMessage({
         type: Events.Type.CLIENT,
         subType: Events.SubType.Client.WALKED_PARCELS,
-        key: `${address}-${amountOfParcelsVisited}`,
+        key: `${parsedAddress}-${amountOfParcelsVisited}`,
         timestamp: Date.now(),
         metadata: {
-          address,
+          address: parsedAddress,
           amountOfParcelsVisited,
           lastParcel: parcelVisited.toString()
         }
