@@ -31,7 +31,7 @@ import { createMoveToParcelHandlerComponent } from './logic/move-to-parcel-handl
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
-  const config = await createDotEnvConfigComponent({ path: ['.en.v.default', '.env.local', '.env'] })
+  const config = await createDotEnvConfigComponent({ path: ['.env.default', '.env.local', '.env'] })
   const WS_SERVER_PORT = await config.requireString('WS_SERVER_PORT')
   const configForWS = createConfigComponent({ HTTP_SERVER_PORT: WS_SERVER_PORT, HTTP_SERVER_HOST: '0.0.0.0' })
 
