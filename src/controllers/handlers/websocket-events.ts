@@ -10,10 +10,12 @@ export function setupWebSocketEventsHandler(
   const logger = logs.getLogger('websocket-events')
 
   uwsServer.app.get('/health/live', (res) => {
+    logger.info('Health check received')
     res.status(200).send('ok')
   })
 
   uwsServer.app.get('/health/ready', (res) => {
+    logger.info('Health check received')
     res.status(200).send('ok')
   })
 
