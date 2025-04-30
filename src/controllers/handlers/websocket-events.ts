@@ -10,14 +10,12 @@ export function setupWebSocketEventsHandler(
   const logger = logs.getLogger('websocket-events')
 
   uwsServer.app.get('/health/live', (res) => {
-    logger.info('Health check received')
     res.writeStatus('200 OK')
     res.writeHeader('Access-Control-Allow-Origin', '*')
     res.end('alive')
   })
 
   uwsServer.app.get('/health/ready', (res) => {
-    logger.info('Health check received')
     res.writeStatus('200 OK')
     res.writeHeader('Access-Control-Allow-Origin', '*')
     res.end('alive')
