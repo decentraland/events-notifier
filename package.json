@@ -24,9 +24,7 @@
     "@well-known-components/metrics": "^2.1.0",
     "@well-known-components/pg-component": "^0.2.3",
     "@well-known-components/thegraph-component": "^1.6.0",
-    "@well-known-components/uws-http-server": "^0.0.2",
-    "cron": "^3.1.7",
-    "ws": "^8.18.1"
+    "@well-known-components/uws-http-server": "^0.0.2"
   },
   "devDependencies": {
     "@dcl/eslint-config": "^2.2.1",
