@@ -26,8 +26,6 @@ export async function setupRouter({ components }: GlobalContext): Promise<{
     setupWebSocketEventsHandler({
       components: {
         logs: components.logs,
-        eventParser: components.eventParser,
-        eventPublisher: components.eventPublisher,
         metrics: components.metrics,
         uwsServer: components.uwsServer,
         moveToParcelHandler: components.moveToParcelHandler

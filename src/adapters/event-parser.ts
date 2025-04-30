@@ -52,22 +52,6 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
 
   function parseExplorerClientEvent(event: any): Event | undefined {
     try {
-      // Handle simplified client event
-      // if (event && event.type === 'CLIENT' && event.subType === 'WALKED_PARCELS') {
-      //   logger.info('Handling simplified WALKED_PARCELS event')
-      //   return {
-      //     type: Events.Type.CLIENT,
-      //     subType: Events.SubType.Client.WALKED_DISTANCE,
-      //     timestamp: Date.now(),
-      //     key: `walked-parcels-${Date.now()}`, // Adding required key
-      //     metadata: {
-      //       address: event.metadata.address,
-      //       amountOfParcelsVisited: event.metadata.amountOfParcelsVisited,
-      //       lastParcel: event.metadata.lastParcel
-      //     }
-      //   } as SimpleClientEvent
-      // }
-
       if (!event || !event.event) return undefined
 
       if (!isAddressCorrectlyConfigured(event)) {
