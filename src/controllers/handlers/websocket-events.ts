@@ -11,12 +11,16 @@ export function setupWebSocketEventsHandler(
 
   uwsServer.app.get('/health/live', (res) => {
     logger.info('Health check received')
-    res.status(200).send('ok')
+    res.writeStatus('200 OK')
+    res.writeHeader('Access-Control-Allow-Origin', '*')
+    res.end('alive')
   })
 
   uwsServer.app.get('/health/ready', (res) => {
     logger.info('Health check received')
-    res.status(200).send('ok')
+    res.writeStatus('200 OK')
+    res.writeHeader('Access-Control-Allow-Origin', '*')
+    res.end('alive')
   })
 
   // Handle WebSocket connections using the UWS HTTP server
