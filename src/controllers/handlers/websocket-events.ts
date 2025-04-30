@@ -9,6 +9,14 @@ export function setupWebSocketEventsHandler(
   const { logs, metrics, uwsServer, moveToParcelHandler } = context.components
   const logger = logs.getLogger('websocket-events')
 
+  uwsServer.app.get('/health/live', (res) => {
+    res.status(200).send('ok')
+  })
+
+  uwsServer.app.get('/health/ready', (res) => {
+    res.status(200).send('ok')
+  })
+
   // Handle WebSocket connections using the UWS HTTP server
   uwsServer.app.ws('/:address/notifications', {
     // Set up upgrade handler to get the address from the URL

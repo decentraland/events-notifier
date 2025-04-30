@@ -25,7 +25,7 @@ RUN yarn install --prod --frozen-lockfile
 
 ########################## END OF BUILD STAGE ##########################
 
-FROM node:lts-alpine
+FROM node:20-alpine
 
 RUN apk update && apk upgrade
 RUN apk add --no-cache tini
