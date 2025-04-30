@@ -62,8 +62,16 @@ export function setupWebSocketEventsHandler(
         try {
           // Try to publish the event directly
           // const result = await eventPublisher.publishMessage(data)
-          const parsedEvent = data
-          logger.info(`Processing event from ${address}:`, parsedEvent)
+          const parsedEvent = {
+            metadata: {
+              visitedParcel: data.new_parcel as string,
+              address: address
+            }
+          }
+
+          logger.info(`Processing event from ${address}:`, {
+            parsedEvent: JSON.stringify(parsedEvent)
+          })
           await moveToParcelHandler.processMoveToParcel(address, parsedEvent.metadata.visitedParcel)
 
           // Record metrics
