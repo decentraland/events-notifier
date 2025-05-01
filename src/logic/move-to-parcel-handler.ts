@@ -17,10 +17,11 @@ export function createMoveToParcelHandlerComponent(
     logger.debug('Amount of parcels visited', { address: parsedAddress, amountOfParcelsVisited })
 
     if (THRESHOLDS.includes(amountOfParcelsVisited)) {
+      logger.debug('Publishing event', { address: parsedAddress, amountOfParcelsVisited })
       await eventPublisher.publishMessage({
         type: Events.Type.CLIENT,
         subType: Events.SubType.Client.WALKED_PARCELS,
-        key: `${parsedAddress}-${amountOfParcelsVisited}`,
+        key: `${parsedAddress}-${amountOfParcelsVisited}-${Date.now()}`,
         timestamp: Date.now(),
         metadata: {
           address: parsedAddress,
