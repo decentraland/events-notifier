@@ -59,6 +59,10 @@ export async function setForwardExplorerEventsHandler(
     }
   }
 
+  logger.info('raw event', {
+    body: JSON.stringify(body)
+  })
+
   const parsedEvent = eventParser.parseExplorerClientEvent(body)
 
   if (!parsedEvent) {
