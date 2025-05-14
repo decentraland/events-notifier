@@ -16,7 +16,7 @@
     "@dcl/catalyst-contracts": "^4.4.2",
     "@dcl/crypto": "^3.4.5",
     "@dcl/platform-server-commons": "^0.0.4",
-    "@dcl/schemas": "^16.6.4",
+    "@dcl/schemas": "https://sdk-team-cdn.decentraland.org/@dcl/schemas/branch/feat/poc-real-time/dcl-schemas-16.8.1-14730127800.commit-e7cf070.tgz",
     "@well-known-components/env-config-provider": "^1.2.0",
     "@well-known-components/http-server": "^2.1.0",
     "@well-known-components/interfaces": "^1.4.3",
@@ -24,11 +24,13 @@
     "@well-known-components/metrics": "^2.1.0",
     "@well-known-components/pg-component": "^0.2.3",
     "@well-known-components/thegraph-component": "^1.6.0",
-    "cron": "^3.1.7"
+    "@well-known-components/uws-http-server": "^0.0.2",
+    "cron": "^4.3.0"
   },
   "devDependencies": {
     "@dcl/eslint-config": "^2.2.1",
     "@types/node": "^20.14.9",
+    "@types/ws": "^8.18.1",
     "@well-known-components/test-helpers": "^1.5.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"

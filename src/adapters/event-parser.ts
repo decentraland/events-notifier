@@ -6,9 +6,21 @@ import {
   PassportOpenedEvent,
   UsedEmoteEvent,
   VerticalHeightReachedEvent,
-  WalkedDistanceEvent
+  WalkedDistanceEvent,
+  Event,
+  BaseEvent
 } from '@dcl/schemas'
 import { AppComponents, IEventParser } from '../types'
+
+// Custom event type for simplified client events
+export interface SimpleClientEvent extends BaseEvent {
+  type: Events.Type.CLIENT
+  subType: Events.SubType.Client.LOGGED_IN
+  metadata: {
+    address: string
+    [key: string]: any
+  }
+}
 
 enum ExplorerEventIds {
   MOVE_TO_PARCEL = 'move_to_parcel',
@@ -17,7 +29,8 @@ enum ExplorerEventIds {
   WALKED_DISTANCE = 'walked_distance',
   VERTICAL_HEIGHT_REACHED = 'vertical_height_reached',
   LOGGED_IN = 'logged_in',
-  LOGGED_IN_CACHED = 'logged_in_cached'
+  LOGGED_IN_CACHED = 'logged_in_cached',
+  WALKED_PARCELS = 'WALKED_PARCELS'
 }
 
 export type ClientEvent =
@@ -28,6 +41,7 @@ export type ClientEvent =
   | WalkedDistanceEvent
   | LoggedInEvent
   | LoggedInCachedEvent
+  | SimpleClientEvent
 
 export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>): IEventParser {
   const logger = logs.getLogger('event-parser')
@@ -36,7 +50,7 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
     return event.context && event.context.dcl_eth_address && event.context.dcl_eth_address !== 'NOT CONFIGURED'
   }
 
-  function parseExplorerClientEvent(event: any): ClientEvent | undefined {
+  function parseExplorerClientEvent(event: any): Event | undefined {
     try {
       if (!event || !event.event) return undefined
 

@@ -1,4 +1,5 @@
-import { createDotEnvConfigComponent } from '@well-known-components/env-config-provider'
+import path from 'path'
+import { createDotEnvConfigComponent, createConfigComponent } from '@well-known-components/env-config-provider'
 import { createMetricsComponent } from '@well-known-components/metrics'
 import { createLogComponent } from '@well-known-components/logger'
 import { createSubgraphComponent } from '@well-known-components/thegraph-component'
@@ -22,13 +23,18 @@ import {
   createStatusCheckComponent,
   instrumentHttpServerWithPromClientRegistry
 } from '@well-known-components/http-server'
+import { createUWsComponent } from '@well-known-components/uws-http-server'
 import { collectionCreatedProducer } from './adapters/producers/collection-created'
 import { itemPublishedProducer } from './adapters/producers/item-published'
 import { createEventParserComponent } from './adapters/event-parser'
+import { createMoveToParcelHandlerComponent } from './logic/move-to-parcel-handler'
 
 // Initialize all the components of the app
 export async function initComponents(): Promise<AppComponents> {
   const config = await createDotEnvConfigComponent({ path: ['.env.default', '.env.local', '.env'] })
+  const WS_SERVER_PORT = await config.requireString('WS_SERVER_PORT')
+  const configForWS = createConfigComponent({ HTTP_SERVER_PORT: WS_SERVER_PORT, HTTP_SERVER_HOST: '0.0.0.0' })
+
   const logs = await createLogComponent({ config })
 
   const server = await createServerComponent<GlobalContext>(
@@ -61,7 +67,18 @@ export async function initComponents(): Promise<AppComponents> {
   }
 
   // This worker writes to the database, so it runs the migrations
-  const pg = await createPgComponent({ logs, config, metrics })
+  const pg = await createPgComponent(
+    { logs, config, metrics },
+    {
+      migration: {
+        databaseUrl,
+        dir: path.resolve(__dirname, 'migrations'),
+        migrationsTable: 'pgmigrations',
+        ignorePattern: '.*\\.map',
+        direction: 'up'
+      }
+    }
+  )
 
   const database = createDatabaseComponent({ pg })
 
@@ -126,12 +143,18 @@ export async function initComponents(): Promise<AppComponents> {
 
   const eventParser = createEventParserComponent({ logs })
 
+  const moveToParcelHandler = createMoveToParcelHandlerComponent({ logs, eventPublisher, database })
+  // Initialize UWS HTTP server for WebSockets
+  const uwsServer = await createUWsComponent({ config: configForWS, logs })
+
   return {
+    pg,
     config,
     logs,
     server,
-    metrics,
+    uwsServer,
     statusChecks,
+    metrics,
     database,
     fetch,
     eventPublisher,
@@ -140,6 +163,7 @@ export async function initComponents(): Promise<AppComponents> {
     landManagerSubGraph,
     rentalsSubGraph,
     marketplaceSubGraph,
-    producerRegistry
+    producerRegistry,
+    moveToParcelHandler
   }
 }
