@@ -185,7 +185,8 @@ export function createEventParserComponent({ logs }: Pick<AppComponents, 'logs'>
               receivedAt: new Date(event.receivedAt).getTime(),
               reportedAt: new Date(event.timestamp).getTime()
             },
-            realm: event.context.realm
+            realm: event.context.realm,
+            contextRuntime: event.context.context_runtime
           }
         } as LoggedInEvent
       }
